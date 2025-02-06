@@ -17,7 +17,7 @@
 
 ### AI Integration:
 - **Fine-Tuning** – For enhancing model performance with custom training.
-- **AI Chatbot** – For conversational AI capabilities.
+- **AI Chatbot** – For conversational AI capabilities
 
 ## Installation and Setup
 1. Clone the repository:
