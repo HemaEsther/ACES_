@@ -1,18 +1,18 @@
 import React from 'react';
-import { Header, Hero, Feature, Social, Footer } from '../components'
+import { Header, Hero, Feature, Social, Footer } from '../Components_Page'
 const LandingPage = () => {
     return (
         <>
         {/* Header Section */}
-        <Header />
+        {/* <Header /> */}
         {/* Hero Section */}
-        <Hero />
+        <Hero/>
         {/* Features Section */}
-        <Feature />
+        {/* <Feature /> */}
         {/* Social Proof Section */}
-        <Social />
+        {/* <Social /> */}
         {/* Footer */}
-        <Footer />
+        {/* <Footer /> */}
         </>
     );
 };
