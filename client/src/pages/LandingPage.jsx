@@ -5,7 +5,7 @@ const LandingPage = () => {
     return (
         <>
         {/* Header Section */}
-        {/* <Header /> */}
+        <Header/>
         {/* Hero Section */}
         <Hero/>
         {/* Features Section */}
