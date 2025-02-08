@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply font-sans;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -54,6 +60,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%}
 }
+
 @layer base {
   * {
     @apply border-border;

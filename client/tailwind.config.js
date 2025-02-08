@@ -1,12 +1,19 @@
 /** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from "tailwindcss-animate";
+import { fontFamily } from "tailwindcss/defaultTheme";
+
 export default {
     darkMode: ["class"],
-    content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+	content: [
+		"./src/**/*.{js,ts,jsx,tsx}",
+		"./components/ui/**/*.{js,ts,jsx,tsx}", // Add this path for ShadCN components
+	  ],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ["Inter", ...fontFamily.sans], // Replace with your preferred font
+			mono: ["Fira Code", ...fontFamily.mono], // Optional for monospace
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -54,7 +61,8 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		}
+
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate], 
 }
