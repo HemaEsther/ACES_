@@ -13,7 +13,7 @@ const LandingPage = () => {
         {/* Social Proof Section */}
         {/* <Social /> */}
         {/* Footer */}
-        {/* <Footer /> */}
+        <Footer />
         </>
     );
 };
