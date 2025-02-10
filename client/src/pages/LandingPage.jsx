@@ -18,7 +18,7 @@ const LandingPage = () => {
         {/* <Social /> */}
         <FAQ/>
         {/* Footer */}
-        {/* <Footer /> */}
+        <Footer />
         </>
     );
 };
