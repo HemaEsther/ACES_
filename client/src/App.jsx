@@ -1,12 +1,14 @@
-import { LandingPage } from "./pages";
-import "./App.css";
+import { LandingPage } from './pages'
+import './App.css'
+
 
 function App() {
   return (
-    <>
-      <LandingPage />
-    </>
-  );
+
+   <>
+   <LandingPage />
+   </>
+  )
 }
 
 export default App;
