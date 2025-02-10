@@ -1,13 +1,22 @@
 /** @type {import('tailwindcss').Config} */
+<<<<<<< HEAD
+=======
+import tailwindcssAnimate from "tailwindcss-animate";
+import { fontFamily } from "tailwindcss/defaultTheme";
+>>>>>>> cfb75c67b716c4b0fca023b056df6daa9e626386
 
 export default {
     darkMode: ["class"],
-    content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+	content: [
+		"./src/**/*.{js,ts,jsx,tsx}",
+		"./components/ui/**/*.{js,ts,jsx,tsx}", // Add this path for ShadCN components
+	  ],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ["Inter", ...fontFamily.sans], // Replace with your preferred font
+			mono: ["Fira Code", ...fontFamily.mono], // Optional for monospace
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -77,7 +86,12 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
+
   	}
   },
+<<<<<<< HEAD
   plugins: [require("tailwindcss-animate"),require("daisyui")],
+=======
+  plugins: [tailwindcssAnimate], 
+>>>>>>> cfb75c67b716c4b0fca023b056df6daa9e626386
 }
