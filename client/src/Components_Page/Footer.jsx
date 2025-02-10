@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <div className='mb-4 mt-20 overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-around'>
+        <div className='overflow-hidden b dark:bg-black  dark:text-slate-200 flex justify-around'>
             {/* Navigation Links */}
             <div className="flex gap-4 mt-4 md:mt-0">
 

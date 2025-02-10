@@ -2,7 +2,7 @@ import { Button } from '../components/ui/button';
 
 const Hero = () => {
     return (
-        <div className='h-screen mt-20 overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-center'>
+        <div className='h-screen mt-12 overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-center'>
             <div className='w-[70%] mx-auto'> {/* This centers the content and limits width to 70% */}
                 
                 {/* First Section (Image Left, Text Right) */}
