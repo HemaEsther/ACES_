@@ -1,26 +1,25 @@
-import React from 'react';
-<<<<<<< HEAD
-import { Header, Hero, Feature, Social, Footer, FAQ } from '../Components_Page'
-=======
-import { Header, Hero, Feature, Social, Footer, Testimonial } from '../Components_Page'
+import React from "react";
 
->>>>>>> cfb75c67b716c4b0fca023b056df6daa9e626386
+import {
+  Header,
+  Hero,
+  Feature,
+  Social,
+  Footer,
+  Testimonial,
+  FAQ
+} from "../Components_Page";
+
 const LandingPage = () => {
-    return (
-        <>
-        {/* Header Section */}
-        <Header/>
-        {/* Hero Section */}
-        <Hero/>
-        {/* Features Section */}
-        <Testimonial/>
-        {/* Social Proof Section */}
-        {/* <Social /> */}
-        <FAQ/>
-        {/* Footer */}
-        <Footer />
-        </>
-    );
+  return (
+    <>
+      <Header />
+      <Hero />
+      <Testimonial />
+      <FAQ />
+      <Footer />
+    </>
+  );
 };
 
 export default LandingPage;
