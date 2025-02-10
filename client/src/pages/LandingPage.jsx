@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Hero, Feature, Social, Footer } from '../Components_Page'
+import { Header, Hero, Feature, Social, Footer, FAQ } from '../Components_Page'
 const LandingPage = () => {
     return (
         <>
@@ -11,6 +11,7 @@ const LandingPage = () => {
         {/* <Feature /> */}
         {/* Social Proof Section */}
         {/* <Social /> */}
+        <FAQ/>
         {/* Footer */}
         {/* <Footer /> */}
         </>
