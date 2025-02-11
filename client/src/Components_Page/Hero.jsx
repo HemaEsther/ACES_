@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button'; // Import the Button component
+import ats from '../assets/ats.png'
+import resume_ from '../assets/resume_.png'
 
 const Hero = () => {
     const containerVariants = {
@@ -15,7 +17,7 @@ const Hero = () => {
 
     return (
         <motion.div
-            className='h-screen mt-20  overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-center'
+            className='md:h-screen mt-20  overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-center'
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -30,7 +32,7 @@ const Hero = () => {
                         <div className='h-60 w-60 overflow-hidden rounded-md'>
                             <motion.img
                                 className="max-w-full h-auto rounded-md object-cover"
-                                src="./src/assets/resume_.png" // Make sure the path is correct
+                                src={resume_} // Make sure the path is correct
                                 alt="resume"
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.3 }}
@@ -78,7 +80,7 @@ const Hero = () => {
                         <div className='h-60 w-60 overflow-hidden rounded-md'>
                             <motion.img
                                 className='max-w-full h-auto rounded-md object-cover'
-                                src="./src/assets/ats.png" // Make sure the path is correct
+                                src={ats} // Make sure the path is correct
                                 alt="ats"
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.3 }}
