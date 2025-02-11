@@ -1,89 +1,50 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import ats from '../assets/ats.png';
-import resume_ from '../assets/resume_.png';
+import { Typewriter } from 'react-simple-typewriter';
+import { useState } from 'react';
 
 const Hero = () => {
     const navigate = useNavigate();
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { duration: 0.8, staggerChildren: 0.3 } },
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, type: "spring", stiffness: 100 } },
-    };
+    const [showTypewriter, setShowTypewriter] = useState(true);
 
     return (
-        <motion.div
-            className='md:h-screen mt-20 overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-center'
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+        <motion.div 
+            className='w-[75%] m-auto text-center flex flex-col items-center justify-center h-screen'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
         >
-            <div className='container mx-auto px-4 md:px-0'>
-                {/* First Section */}
-                <motion.div
-                    className='flex flex-col md:flex-row mt-5 h-auto overflow-hidden justify-center items-center'
-                    variants={itemVariants}
+            <h1 className='text-5xl font-bold text-black dark:text-white'>
+                {showTypewriter ? (
+                    <Typewriter
+                        words={['AI-Powered Resume Builder & ATS Checker']}
+                        loop={false}
+                        cursor
+                        cursorStyle='|'
+                        typeSpeed={70}
+                        onDone={() => setShowTypewriter(false)}
+                    />
+                ) : (
+                    'AI-Powered Resume Builder & ATS Checker'
+                )}
+            </h1>
+            <p className='mt-4 text-lg text-gray-700 dark:text-gray-300'>
+                Build a professional resume in minutes and check its ATS compatibility effortlessly.
+            </p>
+            <div className='mt-6 flex gap-6'>
+                <Button 
+                    className='px-6 py-3 text-lg font-semibold rounded-lg shadow-md bg-blue-600 text-white hover:bg-blue-700'
+                    onClick={() => navigate('/build-resume')}
                 >
-                    <motion.div className='w-full md:w-1/2 flex justify-center items-center' variants={itemVariants}>
-                        <div className='h-60 w-60 overflow-hidden rounded-md'>
-                            <motion.img
-                                className='max-w-full h-auto rounded-md object-cover'
-                                src={resume_}
-                                alt='resume'
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.3 }}
-                            />
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        className='w-full md:w-1/2 mt-5 md:mt-0 flex flex-col justify-center items-center m-2 p-2 shadow-md rounded-md text-center hover:shadow-lg'
-                        variants={itemVariants}
-                    >
-                        <q>Craft the Perfect Resume, Effortlessly.</q>
-                        <p className='mt-4 font-light text-sm md:block hidden'>
-                            Stop struggling with resume formatting and content. Our AI-powered resume builder takes the guesswork out of creating a standout resume.
-                        </p>
-                        <Button onClick={() => navigate('/login')} variant='secondary' className='mt-6'>
-                            Build Resume
-                        </Button>
-                    </motion.div>
-                </motion.div>
-
-                {/* Second Section */}
-                <motion.div
-                    className='flex flex-col md:flex-row mt-10 h-auto overflow-hidden justify-center items-center'
-                    variants={itemVariants}
+                    Build Resume
+                </Button>
+                <Button 
+                    className='px-6 py-3 text-lg font-semibold rounded-lg shadow-md bg-green-600 text-white hover:bg-green-700'
+                    onClick={() => navigate('/check-ats')}
                 >
-                    <motion.div
-                        className='w-full md:w-1/2 mt-5 md:mt-0 order-2 md:order-1 flex flex-col justify-center items-center font-black m-2 p-2 shadow-md rounded-md text-center hover:shadow-xl'
-                        variants={itemVariants}
-                    >
-                        <q>Shine through the ATS. Get checked now.</q>
-                        <p className='mt-4 font-light text-sm'>
-                            Leverage the power of AI to conquer the ATS. Our AI understands the nuances of language and identifies the connections between your experience and job descriptions.
-                        </p>
-                        <Button onClick={() => navigate('/login')} variant='destructive' className='mt-6'>
-                            Scan My ATS
-                        </Button>
-                    </motion.div>
-                    <motion.div className='w-full md:w-1/2 order-1 md:order-2 flex justify-center items-center' variants={itemVariants}>
-                        <div className='h-60 w-60 overflow-hidden rounded-md'>
-                            <motion.img
-                                className='max-w-full h-auto rounded-md object-cover'
-                                src={ats}
-                                alt='ATS'
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.3 }}
-                            />
-                        </div>
-                    </motion.div>
-                </motion.div>
+                    Check ATS Score
+                </Button>
             </div>
         </motion.div>
     );
