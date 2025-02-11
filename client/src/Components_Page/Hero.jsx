@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 
 const Hero = () => {
+    const navigate = useNavigate();
     return (
         <div className='h-screen mt-12 overflow-hidden bg-white dark:bg-black text-black dark:text-slate-200 flex justify-center'>
             <div className='w-[70%] mx-auto'> {/* This centers the content and limits width to 70% */}
@@ -26,7 +28,9 @@ const Hero = () => {
                             Simply input your work experience and skills, and our intelligent algorithms will
                             generate a professional, ATS-friendly resume tailored to your target jobs.
                         </p>
-                        <Button variant="secondary" className='mt-6 '>Build Resume</Button>
+                        <Button onClick={() => navigate('/login')} variant="secondary" className='mt-6'>
+                            Build Resume
+                        </Button>
                     </div>
                 </div>
 
@@ -46,7 +50,9 @@ const Hero = () => {
                             our AI understands the nuances of language and identifies
                             the connections between your experience and the job description.
                         </p>
-                        <Button variant='secondary' className='mt-2'>Scan My ATS</Button>
+                        <Button onClick={() => navigate('/login')} variant='secondary' className='mt-2'>
+                            Scan My ATS
+                        </Button>
                     </div>
                     <div className='w-full md:w-1/2 order-1 md:order-2 flex justify-center 
                     items-center'>
