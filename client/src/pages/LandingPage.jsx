@@ -12,8 +12,8 @@ const LandingPage = () => {
     <>
       <Header />
       <Hero />
-      <Testimonial />
       <FAQ />
+      <Testimonial />
       <Footer />
     </>
   );
