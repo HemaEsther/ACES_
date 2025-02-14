@@ -3,6 +3,7 @@ import "./App.css";
 import Login from "./Components_Page/Login";
 import Signup from "./Components_Page/Signup";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ATSScorePage from "./Components_Page/ATSScorePage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/ats" element={<ATSScorePage />} />
       </Routes>
     </BrowserRouter>
   );
