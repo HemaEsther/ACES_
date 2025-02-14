@@ -48,7 +48,7 @@ const Dashboard = () => {
         >
           <Button
             className="px-6 py-3 text-lg font-medium bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
-            onClick={() => navigate("/check-ats")}
+            onClick={() => navigate("/ats")}
           >
             Check Your ATS Score
           </Button>
