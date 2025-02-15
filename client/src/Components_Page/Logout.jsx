@@ -23,10 +23,11 @@ const Logout = () => {
       });
   
       // Keep spinner visible for at least 1.5 seconds before navigating
-      setTimeout(() => {
-        navigate("/login");
-        setLoading(false);
-      }, 1500);
+      navigate("/login");
+      // setTimeout(() => {
+       
+      //   setLoading(false);
+      // }, 1500);
     } catch (error) {
       toast.error(`Logout failed. Please try again. ${error.message}`, { autoClose: 5000 });
       setLoading(false);

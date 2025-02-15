@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/authStore";
+import { useRef } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,17 +14,21 @@ const Login = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated); // Correct way to track changes
   const navigate = useNavigate();
 
+  const firstRender = useRef(true);
+
   useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false; // Skip the first render
+      return;
+    }
+
     if (isAuthenticated) {
       toast.success("Login successful! Redirecting...", {
         position: "top-right",
         autoClose: 2000,
         theme: "colored",
       });
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+      navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
