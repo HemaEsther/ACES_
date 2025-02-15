@@ -1,47 +1,52 @@
-import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuthStore from "../store/authStore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const login = useAuthStore((state) => state.login);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated); // Correct way to track changes
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      toast.success("Login successful! Redirecting...", {
+        position: "top-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        { email, password },
-        { withCredentials: true } // important for cookies
-      );
-
-      if (response.status === 200) {
-        // Store token for authentication
-        // localStorage.setItem("token", response.data.user.token);
-        toast.success("Login successful! Redirecting...", {
-          position: "top-right",
-          autoClose: 2000,
-          theme: "colored",
-        });
-        // Redirect to dashboard
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1000);
-      }
+      await login({ email, password });
+  
+      // Wait for authentication status to update
+      setTimeout(() => {
+        if (!useAuthStore.getState().isAuthenticated) {
+          toast.error("Invalid email or password!");
+        }
+      }, 500);
     } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
-      toast.error(
-        error.response?.data?.message || "Invalid email or password!"
-      );
+      toast.error("Something went wrong. Please try again.",error);
+    } finally {
       setLoading(false);
     }
   };
+  
 
   const handleGoogleSignIn = () => {
     console.log("Google Sign-In clicked");
@@ -91,7 +96,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className=" flex items-center justify-center w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition font-semibold"
+              className="flex items-center justify-center w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition font-semibold"
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin flex items-center justify-center" />

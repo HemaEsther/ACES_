@@ -5,22 +5,22 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/connectDB.js';
 dotenv.config();
 
+
 const app = express();
 
+
+
+//middlewares
 app.use(express.json());
+app.use(cookieParser()); // Required for handling cookies
 app.use(
     cors({
       origin: "http://localhost:5173", // ✅ Allow frontend origin
       credentials: true, // ✅ Allow cookies to be sent
     })
 );
-app.use(cookieParser()); // Required for handling cookies
 
-// app.use(cors());
 
-app.get('/',(req,res)=>{
-    res.send("hello from server");
-})
 
 // Routes
 import authRoutes from './routes/authRoutes.js'
