@@ -21,7 +21,7 @@ const Signup = () => {
     try {
       await signup({ username: name, email, password }); // Call auth store login
       toast.success("Signup successful! Redirecting...");
-      setTimeout(() => navigate("/dashboard"), 1000);
+      navigate("/dashboard");
     } catch (error) {
       const errorMsg =
         error.response?.data?.message || "Signup failed. Please try again.";
@@ -30,6 +30,10 @@ const Signup = () => {
       setLoading(false);
     }
   };
+
+  const handleGoogleSignIn = ()=>{
+    
+  }
 
   return (
     <>
@@ -110,6 +114,20 @@ const Signup = () => {
               OR
             </span>
           </div>
+
+          <button
+            onClick={handleGoogleSignIn}
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 py-3 rounded-lg mt-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+          >
+            <img
+              src="https://www.svgrepo.com/show/355037/google.svg"
+              alt="Google Logo"
+              className="h-5 w-5"
+            />
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              Sign in with Google
+            </span>
+          </button>
 
           <p className="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm">
             Already have an account?{" "}

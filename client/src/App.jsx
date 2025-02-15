@@ -7,6 +7,7 @@ import Signup from "./Components_Page/Signup";
 import Dashboard from "./Components_Page/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ATSScorePage from "./Components_Page/ATSScorePage";
+import BuildResume from "./Components_Page/buildResume/BuildResume";
 
 function App() {
   const fetchUser = useAuthStore((state) => state.fetchUser);
@@ -25,6 +26,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/ats" element={<ATSScorePage />} />
+          <Route path="/buildresume" element={<BuildResume />} />
         </Route>
       </Routes>
     </BrowserRouter>

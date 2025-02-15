@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 
 import ThemeToggle from "../components/ThemeToggle";
 
-const Header = () => {
+const HeaderDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <div
-      className={`fixed top-0 z-50 w-screen h-14 flex items-center px-6 justify-between transition-all duration-300 font-serif ${
+      className={`border fixed top-0 z-50 w-screen h-14 flex items-center px-6 justify-between transition-all duration-300 font-serif ${
         isScrolled
           ? "bg-slate-50 dark:bg-black shadow-md"
           : "bg-transparent dark:bg-transparent"
@@ -33,7 +33,7 @@ const Header = () => {
       {/* Clickable logo */}
       <Link to="/">
         {/* <img src={cvlogo} alt="Logo" className="w-20 cursor-pointer" /> */}
-        <p className="text-bold text-3xl text-slate-800 dark:text-slate-200">ACES</p>
+        <p className="  text-bold text-3xl text-slate-800 dark:text-slate-200">ACES</p>
       </Link>
 
       {/* Hamburger Icon for Mobile */}
@@ -50,7 +50,7 @@ const Header = () => {
       {/* Desktop Navigation */}
       <nav className="hidden md:block">
         <ul className="flex justify-center items-center space-x-6 text-lg text-black dark:text-white">
-          <li>
+          {/* <li>
             <Link
               to="/"
               className="hover:text-gray-600 dark:hover:text-gray-400 transition"
@@ -81,7 +81,7 @@ const Header = () => {
             >
               Contact
             </Link>
-          </li>
+          </li> */}
           <ThemeToggle />
         </ul>
       </nav>
@@ -90,7 +90,7 @@ const Header = () => {
       {isOpen && (
         <div className="absolute top-14 left-0 w-full bg-white dark:bg-black p-4 md:hidden shadow-lg transition-colors">
           <ul className="flex flex-col space-y-4 text-lg text-black dark:text-white">
-            <li>
+            {/* <li>
               <Link
                 to="/"
                 className="hover:text-gray-600 dark:hover:text-gray-400 transition"
@@ -125,7 +125,7 @@ const Header = () => {
               >
                 Contact
               </Link>
-            </li>
+            </li> */}
             <li>
               <ThemeToggle />
             </li>
@@ -136,4 +136,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderDashboard;
