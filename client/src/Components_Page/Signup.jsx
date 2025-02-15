@@ -25,19 +25,18 @@ const Signup = () => {
           email,
           password,
         },
-        { withCredentials: true }
+        { withCredentials: true } // Important: Ensures cookies are sent
       );
 
       if (response.status === 201) {
         toast.success("Signup successful! Redirecting...", {
           position: "top-right",
-          autoClose: 3000,
+          autoClose: 2000,
           theme: "colored",
         });
 
-        localStorage.setItem("token", response.data.user.token);
-        setTimeout(() => navigate("/dashboard"), 2000); // Redirect after toast
-        setLoading(false);
+        // localStorage.setItem("token", response.data.user.token);
+        setTimeout(() => navigate("/dashboard"), 1000); 
       }
     } catch (error) {
       const errorMsg =

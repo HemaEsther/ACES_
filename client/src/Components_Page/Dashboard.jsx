@@ -2,21 +2,18 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Header from "./Header";
+import Logout from "./Logout";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token
-    navigate("/login"); // Redirect to login
-  };
-
   return (
     <>
     <Header/>
+   
     <div className="bg-slate-100 dark:bg-black">
+ 
     <div className=" w-[75%] m-auto min-h-screen flex flex-col items-center justify-center text-center px-4">
-      {/* Poetic Line */}
+
       <motion.h1
         className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -55,22 +52,19 @@ const Dashboard = () => {
         </motion.div>
       </div>
 
-      {/* Logout Button */}
       <motion.div
         className="mt-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1 }}
       >
-        <Button
-          className="px-4 py-2 text-sm font-medium bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700"
-          onClick={handleLogout}
-        >
-          Logout
-        </Button>
+       
       </motion.div>
+      
+      <Logout/>
     </div>
     </div>
+  
      
     </>
   

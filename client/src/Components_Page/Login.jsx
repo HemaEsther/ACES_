@@ -18,20 +18,21 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true } // important for cookies
       );
 
       if (response.status === 200) {
-        console.log("Login successful:", response.data);
-
         // Store token for authentication
-        localStorage.setItem("token", response.data.user.token);
-
+        // localStorage.setItem("token", response.data.user.token);
+        toast.success("Login successful! Redirecting...", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "colored",
+        });
         // Redirect to dashboard
         setTimeout(() => {
-          setLoading(false);
           navigate("/dashboard");
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
@@ -92,11 +93,11 @@ const Login = () => {
               type="submit"
               className=" flex items-center justify-center w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition font-semibold"
             >
-             {loading ? (
-              <Loader2 className="h-5 w-5 animate-spin flex items-center justify-center" />
-            ) : (
-              "Login"
-            )}
+              {loading ? (
+                <Loader2 className="h-5 w-5 animate-spin flex items-center justify-center" />
+              ) : (
+                "Login"
+              )}
             </button>
           </form>
 

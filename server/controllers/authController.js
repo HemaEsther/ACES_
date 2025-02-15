@@ -6,32 +6,35 @@ import bcrypt from 'bcryptjs';
 export const registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
+
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User with this email already exists" });
         }
+
         // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+
         // Create new user
         const newUser = new User({
             username,
             email,
             password: hashedPassword,
         });
-
         await newUser.save();
+
         // Generate JWT token
-        const token = generateToken(newUser._id);
-        // Return response with token (excluding password for security)
+        const token = generateToken(res,newUser._id);
+
         res.status(201).json({
             message: "User registered successfully",
             user: {
                 _id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                token
+                token // optional
             }
         });
 
@@ -59,7 +62,7 @@ export const loginUser = async (req, res) => {
         }
 
         // Generate JWT token
-        const token = generateToken(user._id);
+        const token = generateToken(res,user._id);
 
         // Set token in HTTP-Only cookie (for security)
         res.cookie("token", token, {
@@ -84,4 +87,13 @@ export const loginUser = async (req, res) => {
         console.error("Error in loginUser controller:", error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
+};
+
+export const logoutUser = (req, res) => {
+    res.cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+  
+    res.status(200).json({ message: "Logged out successfully" });
 };
