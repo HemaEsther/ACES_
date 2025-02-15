@@ -1,9 +1,9 @@
-import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuthStore from "../store/authStore"; // Import auth store
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -12,47 +12,23 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { signup } = useAuthStore(); // Use login function from auth store
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
-        {
-          username: name,
-          email,
-          password,
-        },
-        { withCredentials: true } // Important: Ensures cookies are sent
-      );
-
-      if (response.status === 201) {
-        toast.success("Signup successful! Redirecting...", {
-          position: "top-right",
-          autoClose: 2000,
-          theme: "colored",
-        });
-
-        // localStorage.setItem("token", response.data.user.token);
-        setTimeout(() => navigate("/dashboard"), 1000); 
-      }
+      await signup({ username: name, email, password }); // Call auth store login
+      toast.success("Signup successful! Redirecting...");
+      setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
       const errorMsg =
         error.response?.data?.message || "Signup failed. Please try again.";
-      toast.error(errorMsg, {
-        position: "top-right",
-        autoClose: 5000,
-        theme: "colored",
-      });
+        toast.error(errorMsg);
+    } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleSignUp = () => {
-    console.log("Google Sign-Up clicked");
-    // Implement Google Sign-Up logic (OAuth, Firebase Auth, etc.)
   };
 
   return (
@@ -113,12 +89,15 @@ const Signup = () => {
 
             <button
               type="submit"
-              className="flex items-center justify-center w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition font-semibold"
+              disabled={loading}
+              className={`flex items-center justify-center w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-500 transition font-semibold ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               {loading ? (
-                <Loader2 className="h-5 w-5 animate-spin flex items-center justify-center" />
+                <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                "Login"
+                "Sign Up"
               )}
             </button>
           </form>
@@ -131,20 +110,6 @@ const Signup = () => {
               OR
             </span>
           </div>
-
-          <button
-            onClick={handleGoogleSignUp}
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:border-gray-600 py-3 rounded-lg mt-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-          >
-            <img
-              src="https://www.svgrepo.com/show/355037/google.svg"
-              alt="Google Logo"
-              className="h-5 w-5"
-            />
-            <span className="text-gray-700 dark:text-gray-300 font-medium">
-              Sign up with Google
-            </span>
-          </button>
 
           <p className="text-center text-gray-500 dark:text-gray-400 mt-4 text-sm">
             Already have an account?{" "}
