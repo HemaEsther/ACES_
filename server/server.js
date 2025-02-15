@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from "dotenv";
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import connectDB from './config/connectDB.js';
 dotenv.config();
 
@@ -12,7 +13,10 @@ app.use(
       origin: "http://localhost:5173", // ✅ Allow frontend origin
       credentials: true, // ✅ Allow cookies to be sent
     })
-  );
+);
+app.use(cookieParser()); // Required for handling cookies
+
+// app.use(cors());
 
 app.get('/',(req,res)=>{
     res.send("hello from server");
