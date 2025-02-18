@@ -1,14 +1,11 @@
 import express from 'express';
 import dotenv from "dotenv";
+dotenv.config();
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/connectDB.js';
-dotenv.config();
-
 
 const app = express();
-
-
 
 //middlewares
 app.use(express.json());
@@ -24,7 +21,10 @@ app.use(
 
 // Routes
 import authRoutes from './routes/authRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
+
 app.use('/api/auth',authRoutes);
+app.use('/api/upload', uploadRoutes);
 
 
 const PORT = process.env.PORT || 5001

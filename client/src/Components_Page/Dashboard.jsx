@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import Logout from "./Logout";
 import HeaderDashboard from "./HeaderDashboard";
 import { PlusCircle } from "lucide-react";
 
@@ -47,10 +45,6 @@ const Dashboard = () => {
             >
               Select Template
             </Button>
-          </div>
-
-          <div className="mt-8">
-            <Logout />
           </div>
         </div>
 
