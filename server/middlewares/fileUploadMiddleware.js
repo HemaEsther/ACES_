@@ -2,9 +2,9 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-const uploadDir = "./uploads/";
+const uploadDir = "./uploads/";  // Checks if the uploads/ directory exists.
 if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+  fs.mkdirSync(uploadDir, { recursive: true }); //If not, fs.mkdirSync creates it recursively .
 }
 
 const storage = multer.diskStorage({
@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /pdf|docx/;
+  const allowedTypes = /pdf|docx/;  //Allowed file types: PDF (.pdf) and Word documents (.docx).
   const ext = path.extname(file.originalname).toLowerCase();
   const mimetype = file.mimetype;
 
