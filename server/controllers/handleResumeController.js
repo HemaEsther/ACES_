@@ -17,7 +17,7 @@ export const handleResume = async (req, res) => {
   }
 
   // Define ATS keywords (can be dynamic later)
-  const keywords = ["JavaScript", "React", "Node.js", "MongoDB", "mongosdb", "node", "nodejs","javascript"];
+  const keywords = ["JavaScript", "React", "NodeJs", "MongoDB"];
   const foundKeywords = keywords.filter((word) => text.includes(word));
 
   // Calculate ATS Score
