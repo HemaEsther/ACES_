@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 import ThemeToggle from "../components/ThemeToggle";
+import Logout from "./Logout";
 
 const HeaderDashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +51,7 @@ const HeaderDashboard = () => {
       {/* Desktop Navigation */}
       <nav className="hidden md:block">
         <ul className="flex justify-center items-center space-x-6 text-lg text-black dark:text-white">
+           <li><Logout /></li> 
           {/* <li>
             <Link
               to="/"

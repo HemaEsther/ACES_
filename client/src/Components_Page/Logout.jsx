@@ -38,7 +38,7 @@ const Logout = () => {
   return (
     <div>
       <Button
-        className="px-4 py-2 text-sm font-medium bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-700"
+        className="px-4 py-2 text-sm font-medium bg-gray-700 hover:bg-slate-800 dark:bg-gray-600 dark:text-slate-200 dark:hover:bg-gray-700"
         onClick={handleLogout}
         disabled={loading}
       >
