@@ -8,7 +8,7 @@ import {
 const FAQ = () => {
   return (
     <>
-      <div className="bg-gray-50 dark:bg-black">
+      <div className=" dark:bg-black">
         <div className="w-[75%] m-auto">
           <h2 className="text-3xl p-8 leading-normal md:text-5xl font-medium mb-10 sm:mb-6 text-center">
             Resume Builder FAQ
@@ -43,8 +43,8 @@ const FAQ = () => {
                   Can I download my resume as a PDF?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Absolutely! Once you've customized your resume, click on the
-                  "Download" button to save it as a PDF file.
+                  {`Absolutely! Once you've customized your resume, click on the
+                  "Download" button to save it as a PDF file.`}
                 </AccordionContent>
               </AccordionItem>
 

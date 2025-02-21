@@ -4,7 +4,7 @@ import useAuthStore from "./store/authStore";
 import { LandingPage } from "./pages";
 import Login from "./Components_Page/Login";
 import Signup from "./Components_Page/Signup";
-import Dashboard from "./Components_Page/Dashboard";
+import Dashboard from "./Components_Page/dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ATSScorePage from "./Components_Page/checkATS/ATSScorePage";
 import BuildResume from "./Components_Page/buildResume/BuildResume";
