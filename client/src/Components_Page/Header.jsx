@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-
 import ThemeToggle from "../components/ThemeToggle";
 
 const Header = () => {
@@ -11,30 +9,37 @@ const Header = () => {
   // Track scrolling to update header background
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Smooth scrolling function
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      setIsOpen(false); // Close mobile menu
+    }
+  };
+
   return (
     <div
-      className={`fixed top-0 z-50 w-screen h-14 flex items-center px-6 justify-between transition-all duration-300 font-serif ${
+      className={`fixed top-0 z-50 w-full h-14 flex items-center px-6 justify-between transition-all duration-300 font-serif ${
         isScrolled
           ? "bg-slate-50 dark:bg-black shadow-md"
           : "bg-transparent dark:bg-transparent"
       }`}
     >
-      {/* Clickable logo */}
-      <Link to="/">
-        {/* <img src={cvlogo} alt="Logo" className="w-20 cursor-pointer" /> */}
-        <p className="text-bold text-3xl text-slate-800 dark:text-slate-200">ACES</p>
-      </Link>
+      {/* Logo */}
+      <a
+        className="text-bold text-3xl text-slate-800 dark:text-slate-200 cursor-pointer"
+        onClick={() => scrollToSection("home")}
+      >
+        ACES
+      </a>
 
       {/* Hamburger Icon for Mobile */}
       <div className="md:hidden">
@@ -50,38 +55,51 @@ const Header = () => {
       {/* Desktop Navigation */}
       <nav className="hidden md:block">
         <ul className="flex justify-center items-center space-x-6 text-lg text-black dark:text-white">
-          <li>
-            <Link
-              to="/"
+          {/* <li>
+            <button
+              href="#home"
               className="hover:text-gray-600 dark:hover:text-gray-400 transition"
+              onClick={() => scrollToSection("home")}
             >
               Home
-            </Link>
+            </button>
           </li>
           <li>
-            <Link
-              to="/about"
+            <button
+              href="#about"
               className="hover:text-gray-600 dark:hover:text-gray-400 transition"
+              onClick={() => scrollToSection("about")}
             >
               About
-            </Link>
+            </button>
           </li>
           <li>
-            <Link
-              to="/testimonials"
+            <button
+              href="#faq"
               className="hover:text-gray-600 dark:hover:text-gray-400 transition"
+              onClick={() => scrollToSection("faq")}
+            >
+              FAQ
+            </button>
+          </li>
+          <li>
+            <button
+              href="#testimonials"
+              className="hover:text-gray-600 dark:hover:text-gray-400 transition"
+              onClick={() => scrollToSection("testimonials")}
             >
               Testimonials
-            </Link>
+            </button>
           </li>
           <li>
-            <Link
-              to="/contact"
+            <button
+              href="#contact"
               className="hover:text-gray-600 dark:hover:text-gray-400 transition"
+              onClick={() => scrollToSection("contact")}
             >
               Contact
-            </Link>
-          </li>
+            </button>
+          </li> */}
           <ThemeToggle />
         </ul>
       </nav>
@@ -90,42 +108,51 @@ const Header = () => {
       {isOpen && (
         <div className="absolute top-14 left-0 w-full bg-white dark:bg-black p-4 md:hidden shadow-lg transition-colors">
           <ul className="flex flex-col space-y-4 text-lg text-black dark:text-white">
-            <li>
-              <Link
-                to="/"
+            {/* <li>
+              <a
+                href="#home"
                 className="hover:text-gray-600 dark:hover:text-gray-400 transition"
-                onClick={() => setIsOpen(false)}
+                onClick={() => scrollToSection("home")}
               >
                 Home
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="/about"
+              <a
+                href="#about"
                 className="hover:text-gray-600 dark:hover:text-gray-400 transition"
-                onClick={() => setIsOpen(false)}
+                onClick={() => scrollToSection("about")}
               >
                 About
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="/testimonials"
+              <a
+                href="#faq"
                 className="hover:text-gray-600 dark:hover:text-gray-400 transition"
-                onClick={() => setIsOpen(false)}
+                onClick={() => scrollToSection("faq")}
+              >
+                FAQ
+              </a>
+            </li>
+            <li>
+              <a
+                href="#testimonials"
+                className="hover:text-gray-600 dark:hover:text-gray-400 transition"
+                onClick={() => scrollToSection("testimonials")}
               >
                 Testimonials
-              </Link>
+              </a>
             </li>
             <li>
-              <Link
-                to="/contact"
+              <a
+                href="#contact"
                 className="hover:text-gray-600 dark:hover:text-gray-400 transition"
-                onClick={() => setIsOpen(false)}
+                onClick={() => scrollToSection("contact")}
               >
                 Contact
-              </Link>
-            </li>
+              </a>
+            </li> */}
             <li>
               <ThemeToggle />
             </li>

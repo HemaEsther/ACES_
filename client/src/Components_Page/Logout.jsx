@@ -22,12 +22,8 @@ const Logout = () => {
         theme: "colored",
       });
   
-      // Keep spinner visible for at least 1.5 seconds before navigating
-      navigate("/login");
-      // setTimeout(() => {
-       
-      //   setLoading(false);
-      // }, 1500);
+      navigate("/");
+   
     } catch (error) {
       toast.error(`Logout failed. Please try again. ${error.message}`, { autoClose: 5000 });
       setLoading(false);
