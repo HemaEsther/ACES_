@@ -8,6 +8,8 @@ import Dashboard from "./Components_Page/dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ATSScorePage from "./Components_Page/checkATS/ATSScorePage";
 import BuildResume from "./Components_Page/buildResume/BuildResume";
+import SelectTemplate from "./Components_Page/selectTemplate/SelectTemplate";
+import HeaderDashboard from "./Components_Page/HeaderDashboard";
 
 function App() {
   const fetchUser = useAuthStore((state) => state.fetchUser);
@@ -27,6 +29,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/ats" element={<ATSScorePage />} />
           <Route path="/buildresume" element={<BuildResume />} />
+          <Route path="/selecttemplate" element={<SelectTemplate />} />
         </Route>
       </Routes>
     </BrowserRouter>
