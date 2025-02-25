@@ -14,15 +14,14 @@
 - **Express.js** – For building RESTful APIs.
 - **MongoDB** – For database storage and management.
 - **Clerk** – For authentication and user management.
+- **Latext Text Editor** – Integration of complex latex text editor for creating industry ready resumes
 
 ### AI Integration:
+- **NLP Text Preprocessing** – Tokkenization, Stop word removal, Lemmatization.
 - **Fine-Tuning** – For enhancing model performance with custom training.
-- **AI Chatbot** – For conversational AI capabilities
+- **AI Chatbot** – For conversational AI capabilities(Fine tuned)
 
-## Installation and Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo.git
+
 
 
 
