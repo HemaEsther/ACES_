@@ -1,27 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AtsResult from "./AtsResult";
 
 const ATSScorePage = () => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null); // for resume
+  const [jobRole, setJobRole] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        // 5MB limit
+        toast.error("File size should not exceed 5MB");
+        return;
+      }
+      if (
+        ![
+          "application/pdf",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ].includes(selectedFile.type)
+      ) {
+        toast.error("Please upload a PDF or DOCX file");
+        return;
+      }
+      setFile(selectedFile);
+      setCurrentStep(2);
+    }
   };
+
+  const handleJobRoleChange = (e) => setJobRole(e.target.value);
+  const handleJobDescriptionChange = (e) => setJobDescription(e.target.value);
+
+  // Move step change to useEffect
+  useEffect(() => {
+    if (results) {
+      setCurrentStep(4);
+    }
+  }, [results]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file) {
-      toast.error("Please upload a file.");
-      return;
-    }
+    if (!file) return toast.error("Please upload a resume first.");
+    if (!jobRole.trim()) return toast.error("Please enter the job role.");
+    if (!jobDescription.trim())
+      return toast.error("Please enter the job description.");
 
     const formData = new FormData();
     formData.append("resume", file);
+    formData.append("role", jobRole);
+    formData.append("job_desc", jobDescription);
     setIsLoading(true);
 
     try {
@@ -33,91 +67,188 @@ const ATSScorePage = () => {
           withCredentials: true,
         }
       );
-
+      // console.log(response); // working fine
+      // console.log(response.data.score);
       setResults(response.data);
+      console.log("Results before rendering AtsResult after req:", results);
+      // setCurrentStep(4);
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error("There was an error uploading the file.");
+      toast.error("There was an error analyzing your resume.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const goToNextStep = () => currentStep < 3 && setCurrentStep(currentStep + 1);
+  const goToPreviousStep = () =>
+    currentStep > 1 && setCurrentStep(currentStep - 1);
+
+  const steps = [
+    { title: "Upload Resume", description: "Upload your PDF or DOCX resume" },
+    { title: "Job Details", description: "Enter job role and description" },
+    { title: "Review & Submit", description: "Review and submit for analysis" },
+  ];
+  console.log("Results before rendering AtsResult:", results);
   return (
-   
-    <div className="bg-gradient-to-r from-pink-100 via-green-100 via-orange-100 to-yellow-100 min-h-screen flex items-center justify-center p-10">
-      <div className="w-[75%] flex flex-col md:flex-row items-center gap-10">
-        {/* LEFT SIDE: Upload Section */}
-        <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-lg">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Start Getting Your Resume Noticed
-          </h1>
-          <p className="text-gray-600 mb-6">
-            Upload your resume to analyze its ATS compatibility and get a score.
-          </p>
-
-          <form onSubmit={handleSubmit}>
-            <label className="flex items-center justify-center px-6 py-4 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 text-white rounded-lg shadow-md cursor-pointer hover:scale-105 transform transition-all duration-300 ease-in-out">
-              {isLoading ? (
-                <div className="animate-spin w-6 h-6 border-4 border-white border-t-transparent rounded-full"></div>
-              ) : (
-                <>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    fill="none"
-                    className="w-5 h-5"
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 flex items-center justify-center">
+      <div className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden">
+        {/* Progress Bar */}
+        <div className="p-6 border-b border-gray-800">
+          <div className="flex items-center justify-between">
+            {steps.map((step, index) => (
+              <div key={index} className="flex items-center">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                      index + 1 <= currentStep
+                        ? "bg-amber-500 text-gray-900"
+                        : "bg-gray-700 text-gray-400"
+                    }`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                  <span className="ml-2">Upload Resume (PDF/DOCX)</span>
-                </>
-              )}
-              <input
-                type="file"
-                onChange={handleFileChange}
-                accept=".pdf,.docx"
-                className="hidden"
-              />
-            </label>
-
-            {file && !isLoading && (
-              <div className="mt-3 text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-                <strong>Selected File:</strong> {file.name}
+                    {index + 1}
+                  </div>
+                  <span className="text-xs mt-2 text-gray-300">
+                    {step.title}
+                  </span>
+                </div>
+                {index < 2 && (
+                  <div
+                    className={`h-1 w-20 mx-4 transition-all duration-300 ${
+                      index + 1 < currentStep ? "bg-amber-500" : "bg-gray-700"
+                    }`}
+                  />
+                )}
               </div>
-            )}
-
-            <button
-              type="submit"
-              className="mt-4 px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Uploading..." : "Check ATS Score"}
-            </button>
-          </form>
+            ))}
+          </div>
         </div>
 
-        {/* RIGHT SIDE: Image or ATS Score Result */}
-        <div className="w-full max-w-lg flex items-center justify-center">
-          {results ? (
-           <AtsResult results={results}/>
-          ) : (
-            <img
-              src="src/assets/ats+template.webp"
-              alt="ATS Checking Resume"
-              className="w-full rounded-lg shadow-lg transition-all duration-500 ease-in-out hover:scale-105"
-            />
+        {/* Content */}
+        <div className="p-6">
+          {currentStep === 1 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  {steps[0].title}
+                </h2>
+                <p className="text-gray-400 text-sm">{steps[0].description}</p>
+              </div>
+              <label className="block">
+                <span className="sr-only">Choose resume file</span>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept=".pdf,.docx"
+                  className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-500 file:text-gray-900 hover:file:bg-amber-600 cursor-pointer"
+                />
+              </label>
+              <button
+                onClick={goToNextStep}
+                disabled={!file}
+                className="w-full py-2 px-4 bg-amber-500 text-gray-900 rounded-lg font-semibold disabled:bg-gray-700 disabled:text-gray-400 hover:bg-amber-600 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          )}
+
+          {currentStep === 2 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  {steps[1].title}
+                </h2>
+                <p className="text-gray-400 text-sm">{steps[1].description}</p>
+              </div>
+              <input
+                type="text"
+                value={jobRole}
+                onChange={handleJobRoleChange}
+                placeholder="Job Role (e.g., Software Engineer)"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+              />
+              <textarea
+                value={jobDescription}
+                onChange={handleJobDescriptionChange}
+                placeholder="Paste the job description here..."
+                rows="6"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+              />
+              <div className="flex space-x-4">
+                <button
+                  onClick={goToPreviousStep}
+                  className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={goToNextStep}
+                  disabled={!jobRole || !jobDescription}
+                  className="flex-1 py-2 px-4 bg-amber-500 text-gray-900 rounded-lg font-semibold disabled:bg-gray-700 disabled:text-gray-400 hover:bg-amber-600 transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 3 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  {steps[2].title}
+                </h2>
+                <p className="text-gray-400 text-sm">{steps[2].description}</p>
+              </div>
+              <div className="space-y-4 text-gray-300">
+                <p>
+                  <strong>File:</strong> {file?.name}
+                </p>
+                <p>
+                  <strong>Job Role:</strong> {jobRole}
+                </p>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {jobDescription.substring(0, 100)}...
+                </p>
+              </div>
+              <div className="flex space-x-4">
+                <button
+                  onClick={goToPreviousStep}
+                  className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                  className="flex-1 py-2 px-4 bg-amber-500 text-gray-900 rounded-lg font-semibold disabled:bg-gray-700 disabled:text-gray-400 hover:bg-amber-600 transition-colors"
+                >
+                  {isLoading ? "Processing..." : "Analyze Resume"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="flex justify-center items-center min-h-[400px]">
+              {isLoading && <p className="text-white">Processing...</p>}
+              {!isLoading && results ? (
+                <AtsResult data={results} />
+              ) : (
+                !isLoading && <p className="text-white">No results yet</p>
+              )}
+            </div>
           )}
         </div>
       </div>
-
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        theme="dark"
+        className="mt-4"
+      />
     </div>
   );
 };
