@@ -1,32 +1,44 @@
-
-import fs from 'fs';
-import PdfParse from 'pdf-parse';
+import fs from "fs";
+import PdfParse from "pdf-parse";
+import axios from "axios";
 
 export const handleResume = async (req, res) => {
-  console.log("Uploaded File:", req.file);
-
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-  let text = "";
+  const { role, job_desc } = req.body;
 
-  try {
-    const pdfData = await PdfParse(fs.readFileSync(req.file.path));
-    text = pdfData.text;
-  } catch (error) {
-    return res.status(500).json({ error: "Error processing file" });
+  if (!role || !job_desc) {
+    return res
+      .status(400)
+      .json({ error: "Job role and description are required" });
   }
 
-  // Define ATS keywords (can be dynamic later)
-  const keywords = ["JavaScript", "React", "NodeJs", "MongoDB"];
-  const foundKeywords = keywords.filter((word) => text.includes(word));
+  let resumeText = "";
+  try {
+    const pdfData = await PdfParse(fs.readFileSync(req.file.path));
+    resumeText = pdfData.text;
+    fs.unlinkSync(req.file.path);
+  } catch (error) {
+    return res.status(500).json({ error: "Error processing resume file" });
+  }
 
-  // Calculate ATS Score
-  const atsScore = (foundKeywords.length / keywords.length) * 100;
+  try {
+    const response = await axios.post("http://127.0.0.1:5002/predict", {
+      resume_text: resumeText,
+      job_desc,
+      role,
+    });
+    // console.log(response.data); // WORKING Fine
 
-  // Generate suggestions
-  const missingKeywords = keywords.filter((word) => !text.includes(word));
-  const suggestions = missingKeywords.map((word) => `Add '${word}' to improve your ATS score.`);
+    // Normalize the response
+    const normalizedResponse = {
+      score: response.data.score,
+      suggestions: [], // Add empty array for consistency
+    };
 
-  res.json({ score: atsScore.toFixed(2), suggestions });
+    return res.json(normalizedResponse);
+  } catch (error) {
+    console.error("Error in ATS model request:", error.message);
+    return res.status(500).json({ error: "ATS Model Error" });
+  }
 };
-

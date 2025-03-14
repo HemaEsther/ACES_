@@ -1,46 +1,85 @@
 import PropTypes from "prop-types";
+import { motion } from "framer-motion"; // For animations
 
-const AtsResult = ({ results }) => {
-  if (!results)
+const AtsResult = ({ data }) => {
+  if (!data) {
     return (
-      <p className="text-gray-500 text-center italic">
+      <p className="text-gray-400 text-center italic">
         No results available. Upload your resume to get a score.
       </p>
     );
+  }
+
+  // Determine score color based on value
+  const getScoreColor = (score) => {
+    if (score >= 80) return "from-green-500 to-teal-500";
+    if (score >= 60) return "from-yellow-500 to-orange-500";
+    return "from-red-500 to-pink-500";
+  };
 
   return (
-    <div className="mt-6 p-6 bg-white shadow-lg rounded-lg w-full max-w-lg text-center">
-      <h2 className="text-2xl font-bold text-gray-800">Your ATS Score</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className=" flex flex-col justify-center items-center mt-6 p-6 bg-gray-800 bg-opacity-90 backdrop-blur-md rounded-xl w-full max-w-lg shadow-2xl border border-gray-700"
+    >
+      {/* Header */}
+      <h2 className="text-3xl font-bold text-white tracking-tight">
+        Your ATS Score
+      </h2>
+      <p className="text-sm text-gray-400 mt-1">
+        How well your resume matches the job
+      </p>
 
-      <div className="mt-4 flex items-center justify-center">
-        <div className="relative w-32 h-32 flex items-center justify-center rounded-full bg-gradient-to-r from-green-400 to-blue-500 text-white text-2xl font-bold shadow-lg">
-          {results.score}%
+      {/* Score Circle */}
+      <div className="mt-6 flex items-center justify-center">
+        <div
+          className={`relative w-36 h-36 flex items-center justify-center rounded-full bg-gradient-to-r ${getScoreColor(
+            data.score
+          )} text-white text-3xl font-extrabold shadow-lg transform transition-transform hover:scale-105`}
+        >
+          <span>{data.score}%</span>
+          <div className="absolute inset-0 rounded-full border-4 border-gray-900 opacity-20" />
         </div>
       </div>
 
-      {results.suggestions && results.suggestions.length > 0 && (
-        <div className="mt-5 text-left">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Suggestions to Improve:
+      {/* Suggestions */}
+      {data.suggestions && data.suggestions.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-semibold text-amber-400">
+            Suggestions to Improve
           </h3>
-          <ul className="mt-2 space-y-2 text-gray-600">
-            {results.suggestions.map((s, i) => (
-              <li key={i} className="p-3 bg-gray-100 rounded-lg shadow-sm">
-                {s}
-              </li>
+          <ul className="mt-4 space-y-3">
+            {data.suggestions.map((suggestion, i) => (
+              <motion.li
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.3 }}
+                className="p-4 bg-gray-700 rounded-lg shadow-md text-gray-200 text-sm hover:bg-gray-600 transition-colors"
+              >
+                {suggestion}
+              </motion.li>
             ))}
           </ul>
         </div>
       )}
-    </div>
+
+      {/* Optional Feedback */}
+      {data.score < 80 && (
+        <p className="mt-4 text-gray-400 text-sm italic">
+          Boost your score by addressing the suggestions below!
+        </p>
+      )}
+    </motion.div>
   );
 };
 
-// ✅ Adding PropTypes validation
 AtsResult.propTypes = {
-  results: PropTypes.shape({
-    score: PropTypes.number, // `score` should be a number
-    suggestions: PropTypes.arrayOf(PropTypes.string), // `suggestions` should be an array of strings
+  data: PropTypes.shape({
+    score: PropTypes.number,
+    suggestions: PropTypes.arrayOf(PropTypes.string),
   }),
 };
 
