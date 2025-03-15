@@ -29,3 +29,58 @@ With ACES, you can enhance your resume, ensure it aligns with job requirements, 
 - **AI Chatbot - Open AI API** – For conversational AI capabilities(Fine tuned)
 
 
+
+# How to get Started
+
+## 1. Fork the Repository
+## 2. Clone the Repository  
+git clone https://github.com/<your_repo_name>
+
+## 3. Open the Project Locally
+cd <project_folder>
+
+
+
+## 4. Setup Frontend
+``` bash
+npm install
+npm run dev
+```
+## 5. Setup Backend
+``` bash
+npm install
+npm run server
+```
+
+## ATS-ML-Model
+### 1. Create a Virtual Environment   
+```bash
+python3 -m venv .venv
+```
+### 2. Activate the Virtual Environment
+For Mac
+```bash
+source .venv/bin/activate
+```
+For Windows
+```bash
+.venv\Scripts\activate
+
+```
+
+### 3. Install Required Dependencies
+``` bash
+pip install -r requirements.txt
+```
+
+### 4. Save Installed Packages for Future Use
+```bash
+pip freeze > requirements.txt
+```
+
+### 5. Deactivate the Virtual Environment
+``` bash
+deactivate
+```
+
+
