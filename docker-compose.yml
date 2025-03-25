@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"  # Ensure correct mapping
+    env_file: 
+      - ./client/.env  # Fix path (remove space)
+    volumes:
+      - ./client:/app  # Mount only the client directory
+      # - /app/node_modules  # Prevent overwriting node_modules
+    restart: always  # Restart on failure
+
+  ml-model:
+    build: 
+      context: ./ml-model
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=5002
+    restart: always
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # Corrected unnecessary comment
+    env_file: 
+      - ./server/.env  # Fix path (remove space)
+    volumes:
+      - ./server:/app  # Mount only the backend directory
+      # - /app/node_modules  # Prevent overwriting node_modules
+    restart: always  # Restart on failure

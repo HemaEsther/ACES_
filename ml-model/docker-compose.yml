@@ -1,0 +1,9 @@
+services:
+  ml-model:
+    build: .
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=5002
+    restart: always
