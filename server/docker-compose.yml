@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # Fix port mapping (Host 5003 → Container 5000)
+    env_file: ./.env  # Load environment variables
+    volumes:
+      - .:/app  # Mount the whole project
+      # - /app/node_modules  # Prevent overwriting node_modules
+    restart: always  # Restart on failure
