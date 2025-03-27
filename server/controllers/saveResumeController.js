@@ -10,7 +10,7 @@ export const saveResumeController = async (req, res) => {
     const { personalInfo, skills, experience, projects, education } = req.body;
 
     const newResume = new Resume({
-      userId,
+      userId, // Links to the authenticated user
       personalInfo,
       skills,
       experience,
