@@ -11,10 +11,10 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser()); // Required for handling cookies
 app.use(
-    cors({
-      origin: "http://localhost:5173", // ✅ Allow frontend origin
-      credentials: true, // ✅ Allow cookies to be sent
-    })
+  cors({
+    origin: "http://localhost:5173", // ✅ Allow frontend origin
+    credentials: true, // ✅ Allow cookies to be sent
+  })
 );
 
 
@@ -22,13 +22,15 @@ app.use(
 // Routes
 import authRoutes from './routes/authRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import saveResumeRoutes from './routes/saveResumeRoutes.js'
 
-app.use('/api/auth',authRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use('/api/auth', authRoutes); // authentication
+app.use('/api/upload', uploadRoutes); // upload resume to check ats score
+app.use('/api/resume', saveResumeRoutes); // CRUD Resume to db
 
 
 const PORT = process.env.PORT || 5001
-app.listen(PORT,()=> {
-    console.log(`server listening at : ${PORT}`);
-    connectDB();
+app.listen(PORT, () => {
+  console.log(`server listening at : ${PORT}`);
+  connectDB();
 })

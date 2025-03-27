@@ -1,228 +1,93 @@
-import { useState, useRef } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import ModernTemplate from "./templates/modernTemplate";
-import ClassicTemplate from "./templates/classicTemplate";
-import { useReactToPrint } from "react-to-print";
+import useResumeStore from "../../store/resumeStore";
+import PersonalInfo from "./components/PersonalInfo";
+import Skills from "./components/Skills";
+import Experience from "./components/Experience";
+import Projects from "./components/Projects";
+import Education from "./components/Education";
+import Preview from "./components/Preview";
 
-const schema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup.string().required("Phone number is required"),
-  linkedin: yup
-    .string()
-    .url("Enter a valid LinkedIn URL")
-    .required("LinkedIn is required"),
-  github: yup
-    .string()
-    .url("Enter a valid GitHub URL")
-    .required("GitHub is required"),
-  summary: yup.string().required("Summary is required"),
-  experienceTitle: yup.string().required("Job title is required"),
-  company: yup.string().required("Company name is required"),
-  duration: yup.string().required("Duration is required"),
-  experience: yup.string().required("Experience description is required"),
-  degree: yup.string().required("Degree is required"),
-  university: yup.string().required("University name is required"),
-  year: yup.string().required("Graduation year is required"),
-  skills: yup.string().required("Skills are required"),
-});
+export default function BuildResume() {
+  const { step, nextStep, prevStep } = useResumeStore();
 
-const Resume = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState("modern");
-
-  const {
-    register,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      name: "John Doe",
-      email: "johndoe@example.com",
-      phone: "123-456-7890",
-      linkedin: "https://linkedin.com/in/johndoe",
-      github: "https://github.com/johndoe",
-      summary: "Experienced software developer skilled in React and Node.js.",
-      experienceTitle: "Frontend Developer",
-      company: "Tech Corp",
-      duration: "2021 - Present",
-      experience: "Developed and maintained React applications.",
-      degree: "B.Sc in Computer Science",
-      university: "XYZ University",
-      year: "2017 - 2021",
-      skills: "React, JavaScript, Node.js, MongoDB, Git",
-    },
-  });
-
-  const details = watch();
-  const resumeRef = useRef();
-
-  // Function to handle PDF download
-  const handleDownload = useReactToPrint({
-    content: () => resumeRef.current,
-    documentTitle: "Resume",
-  });
+  const steps = [
+    { component: <PersonalInfo />, title: "Personal Info" },
+    { component: <Skills />, title: "Skills" },
+    { component: <Experience />, title: "Experience" },
+    { component: <Projects />, title: "Projects" },
+    { component: <Education />, title: "Education" },
+    { component: <Preview />, title: "Preview" },
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Template Selector */}
-      <div className="flex justify-center space-x-4 mb-6">
-        <button
-          onClick={() => setSelectedTemplate("modern")}
-          className={`px-4 py-2 rounded transition duration-200 ${
-            selectedTemplate === "modern"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-          }`}
-        >
-          Modern
-        </button>
-        <button
-          onClick={() => setSelectedTemplate("classic")}
-          className={`px-4 py-2 rounded transition duration-200 ${
-            selectedTemplate === "classic"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-          }`}
-        >
-          Classic
-        </button>
-      </div>
-
-      {/* Two-Column Layout */}
-      <div className="flex flex-col md:flex-row gap-8">
-        {/* Left Side - Input Form */}
-        <div className="w-full md:w-1/2 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">Enter Your Details</h2>
-          <form className="space-y-3">
-            <input
-              {...register("name")}
-              placeholder="Full Name"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.name?.message}</p>
-
-            <input
-              {...register("email")}
-              placeholder="Email"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.email?.message}</p>
-
-            <input
-              {...register("phone")}
-              placeholder="Phone"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.phone?.message}</p>
-
-            <input
-              {...register("linkedin")}
-              placeholder="LinkedIn Profile"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.linkedin?.message}</p>
-
-            <input
-              {...register("github")}
-              placeholder="GitHub Profile"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.github?.message}</p>
-
-            <textarea
-              {...register("summary")}
-              placeholder="Summary"
-              className="w-full p-2 border rounded dark:text-black"
-            ></textarea>
-            <p className="text-red-500">{errors.summary?.message}</p>
-
-            <h3 className="text-md font-semibold">Experience</h3>
-            <input
-              {...register("experienceTitle")}
-              placeholder="Job Title"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.experienceTitle?.message}</p>
-
-            <input
-              {...register("company")}
-              placeholder="Company"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.company?.message}</p>
-
-            <input
-              {...register("duration")}
-              placeholder="Duration"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.duration?.message}</p>
-
-            <textarea
-              {...register("experience")}
-              placeholder="Describe your role"
-              className="w-full p-2 border rounded dark:text-black"
-            ></textarea>
-            <p className="text-red-500">{errors.experience?.message}</p>
-
-            <h3 className="text-md font-semibold">Education</h3>
-            <input
-              {...register("degree")}
-              placeholder="Degree"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.degree?.message}</p>
-
-            <input
-              {...register("university")}
-              placeholder="University"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.university?.message}</p>
-
-            <input
-              {...register("year")}
-              placeholder="Year"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.year?.message}</p>
-
-            <h3 className="text-md font-semibold">Skills</h3>
-            <input
-              {...register("skills")}
-              placeholder="Skills (comma-separated)"
-              className="w-full p-2 border rounded dark:text-black"
-            />
-            <p className="text-red-500">{errors.skills?.message}</p>
-          </form>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 flex items-center justify-center">
+      <div className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden">
+        {/* Progress Bar */}
+        <div className="p-6 border-b border-gray-800">
+          <h1 className="text-2xl font-bold text-white mb-6 text-center">
+            Resume Builder
+          </h1>
+          <div className="flex items-center justify-between">
+            {steps.map((_, index) => (
+              <div key={index} className="flex items-center">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                      index + 1 <= step
+                        ? "bg-amber-500 text-gray-900"
+                        : "bg-gray-700 text-gray-400"
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                  <span className="text-xs mt-2 text-gray-300">
+                    {steps[index].title}
+                  </span>
+                </div>
+                {index < steps.length - 1 && (
+                  <div
+                    className={`h-1 w-16 mx-2 transition-all duration-300 ${
+                      index + 1 < step ? "bg-amber-500" : "bg-gray-700"
+                    }`}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Right Side - Resume Preview */}
-        {/* Resume Preview Section */}
-        <div className="w-full md:w-1/2 bg-white dark:bg-black p-4 rounded-lg shadow border">
-          <h2 className="text-lg font-semibold mb-4">Resume Preview</h2>
-          {/* Apply ref directly here */}
-          <div ref={resumeRef}>
-            {selectedTemplate === "modern" ? (
-              <ModernTemplate details={details} />
-            ) : (
-              <ClassicTemplate details={details} />
-            )}
+        {/* Content */}
+        <div className="p-6">
+          <div className="min-h-[400px] flex flex-col justify-between">
+            <div>{steps[step - 1].component}</div>
+            
+            {/* Navigation Buttons */}
+            <div className="mt-6 flex justify-between gap-4">
+              {step > 1 && (
+                <button
+                  onClick={prevStep}
+                  className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors duration-300"
+                >
+                  Previous
+                </button>
+              )}
+              {step < steps.length ? (
+                <button
+                  onClick={nextStep}
+                  className="flex-1 py-2 px-4 bg-amber-500 text-gray-900 rounded-lg font-semibold hover:bg-amber-600 transition-colors duration-300"
+                >
+                  Next
+                </button>
+              ) : (
+                <button
+                  className="flex-1 py-2 px-4 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300"
+                >
+                  Finish
+                </button>
+              )}
+            </div>
           </div>
-          {/* Download Button */}
-          <button
-            onClick={handleDownload}
-            className="mt-4 px-4 py-2 bg-green-500 dark:bg-green-700 text-white rounded-lg w-full text-center"
-          >
-            Download PDF
-          </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default Resume;
+}

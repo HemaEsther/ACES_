@@ -12,6 +12,7 @@ export const authenticateUser = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log("Decoded token: ", decoded); // gives the monogodb _id of the user
     req.user = decoded; // Attach user info to request object
     next(); // Move to the next middleware/controller
   } catch (error) {
