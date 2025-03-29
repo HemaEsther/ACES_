@@ -3,11 +3,11 @@ import useResumeStore from "../../../store/resumeStore";
 import { FiPlus, FiTrash } from "react-icons/fi";
 
 export default function Education() {
-  const { education, setEducation, fetchResume, updateResume } = useResumeStore();
+  const { education, setEducation, fetchResume, updateResume, currentResumeId } = useResumeStore();
   const [edu, setEdu] = useState({ school: "", degree: "", year: "" });
   
   useEffect(() => {
-    if (education.length === 0) fetchResume();
+    if (education.length === 0) fetchResume(currentResumeId);
   }, []);
   
 
@@ -19,7 +19,7 @@ export default function Education() {
     setEdu({ school: "", degree: "", year: "" });
 
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error adding education:", error);
     }
@@ -30,7 +30,7 @@ export default function Education() {
     setEducation(updatedEducation);
 
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error removing education:", error);
     }

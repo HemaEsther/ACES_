@@ -3,12 +3,12 @@ import useResumeStore from "../../../store/resumeStore";
 import { FiPlus, FiTrash } from "react-icons/fi";
 
 export default function Projects() {
-  const { projects, setProjects, fetchResume, updateResume } = useResumeStore();
+  const { projects, setProjects, fetchResume, updateResume, currentResumeId } = useResumeStore();
   const [project, setProject] = useState({ title: "", description: "", link: "" });
  
 
   useEffect(() => {
-    fetchResume();
+    fetchResume(currentResumeId);
   }, []);
 
   const addProject = async () => {
@@ -19,7 +19,7 @@ export default function Projects() {
     setProject({ title: "", description: "", link: "" });
 
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error adding project:", error);
     }
@@ -30,7 +30,7 @@ export default function Projects() {
     setProjects(updatedProjects);
 
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error removing project:", error);
     }

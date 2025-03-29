@@ -3,11 +3,11 @@ import useResumeStore from "../../../store/resumeStore";
 import { FiPlus, FiTrash } from "react-icons/fi";
 
 export default function Experience() {
-  const { experience, setExperience, fetchResume, updateResume} = useResumeStore();
+  const { experience, setExperience, fetchResume, updateResume, currentResumeId} = useResumeStore();
   const [job, setJob] = useState({ company: "", role: "", duration: "", description: "" });
 
   useEffect(() => {
-    fetchResume();
+    fetchResume(currentResumeId);
   }, []);
 
   const addExperience = async () => {
@@ -25,7 +25,7 @@ export default function Experience() {
     setJob({ company: "", role: "", duration: "", description: "" });
 
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error updating resume:", error);
     }
@@ -36,7 +36,7 @@ export default function Experience() {
     setExperience(updatedExperience);
 
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error updating resume:", error);
     }

@@ -1,12 +1,12 @@
 import Resume from "../models/resumeSchema.js";
-import mongoose from "mongoose";
 import puppeteer from "puppeteer";
+import mongoose from "mongoose";
 
 // Create a new Resume (CREATE)
 export const saveResumeController = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log("userId in creating a resume", userId);
+    // console.log("userId in creating a resume", userId);
     const { personalInfo, skills, experience, projects, education } = req.body;
 
     const newResume = new Resume({
@@ -25,11 +25,31 @@ export const saveResumeController = async (req, res) => {
   }
 };
 // Get the saved resume for the logged-in user (READ)
+export const getAllUserResumesController = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // console.log("userId:", userId);
+
+    const resumes = await Resume.find({ userId });
+
+    if (!resumes) return res.status(404).json({ message: "Resume not found" });
+
+    res.status(200).json({ resumes });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 export const getSavedResumesController = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log("userId in getting a resume", userId);
-    const resume = await Resume.findOne({ userId });
+    const resumeId = req.params.resumeId;
+
+    // console.log("userId:", userId);
+    // console.log("resumeId:", resumeId);
+
+    // Find the resume with both userId and _id
+    const resume = await Resume.findOne({ _id: resumeId, userId });
 
     if (!resume) return res.status(404).json({ message: "Resume not found" });
 
@@ -38,46 +58,101 @@ export const getSavedResumesController = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 // Update the saved resume (UPDATE)
-export const updateSavedResumesController = async (req, res) => {
+export const updateResumeController = async (req, res) => {
   try {
-    if (!Object.keys(req.body).length) {
-      return res.status(400).json({ error: "No update data provided" });
-    }
-
     const userId = req.user.id;
-
-    const updatedResume = await Resume.findOneAndUpdate(
-      { userId },
-      { $set: req.body },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedResume) {
-      return res.status(404).json({ error: "Resume not found" });
+    const resumeId = req.params.resumeId;
+    // console.log("Authenticated userId:", userId);
+    if (!mongoose.Types.ObjectId.isValid(resumeId)) {
+      console.log("Invalid resumeId:", resumeId);
+      return res.status(400).json({ message: "Invalid resume ID" });
     }
 
-    res.status(200).json(updatedResume);
+    const { personalInfo, skills, experience, projects, education } = req.body;
+    // console.log("Parsed body:", { personalInfo, skills, experience, projects, education });
+
+    // Clean subdocuments to avoid _id conflicts
+    const cleanExperience = experience.map(({ _id, ...rest }) => rest);
+    const cleanProjects = projects.map(({ _id, ...rest }) => rest);
+    const cleanEducation = education.map(({ _id, ...rest }) => rest);
+    // console.log("Cleaned data:", { personalInfo, skills, cleanExperience, cleanProjects, cleanEducation });
+
+    const resume = await Resume.findOneAndUpdate(
+      { _id: resumeId, userId },
+      {
+        personalInfo,
+        skills,
+        experience: cleanExperience,
+        projects: cleanProjects,
+        education: cleanEducation,
+      },
+      { new: true }
+    );
+    // console.log("Updated resume:", resume);
+
+    if (!resume) {
+      console.log(
+        "Resume not found for resumeId:",
+        resumeId,
+        "and userId:",
+        userId
+      );
+      return res
+        .status(404)
+        .json({ message: "Resume not found or you don’t have access" });
+    }
+
+    res.status(200).json({ message: "Resume updated successfully", resume });
   } catch (err) {
-    console.error("Error updating resume:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Update Resume Error:", err.stack || err);
+    res.status(500).json({ error: err.message || "Internal server error" });
   }
 };
+
+export const deleteResumeController = async (req, res) => {
+  try {
+    const userId = req.user.id; // get authemticated user id
+    const resumeId = req.params.resumeId;
+    // console.log("resume Id: ",resumeId)
+
+    if (!mongoose.Types.ObjectId.isValid(resumeId)) {
+      return res.status(400).json({ message: "Invalid resume ID" });
+    }
+
+    const resume = await Resume.findOneAndDelete({ _id: resumeId });
+
+    if (!resume) {
+      return res
+        .status(404)
+        .json({ message: "Resume not found or you don’t have access" });
+    }
+
+    res.status(200).json({ message: "Resume deleted successfully" });
+  } catch (err) {
+    console.error("Delete Resume Error:", err);
+    res.status(500).json({ error: err.message || "Internal server error" });
+  }
+};
+
+// Route: router.patch("/update/:resumeId", authenticateUser, updateResumeController);
 // Download Resume as PDF (DOWNLOAD)
 export const downloadResumeController = async (req, res) => {
   try {
     const userId = req.user.id;
-    const resume = await Resume.findOne({ userId });
+    const resumeId = req.params.resumeId;
+    // console.log("Authenticated userId:", userId);
+    // console.log("Resume ID to download:", resumeId);
 
+    const resume = await Resume.findOne({ _id: resumeId, userId });
     if (!resume) return res.status(404).json({ message: "Resume not found" });
 
-    console.log("Generating PDF for:", resume.personalInfo.name);
+    // console.log("Generating PDF for:", resume.personalInfo.name);
 
-    // Launch Puppeteer
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
 
-    // Generate HTML Content
     const htmlContent = `
       <html>
       <head>
@@ -91,65 +166,36 @@ export const downloadResumeController = async (req, res) => {
         <h2>${resume.personalInfo?.name || "N/A"}</h2>
         <p>Email: ${resume.personalInfo?.email || "N/A"}</p>
         <p>Phone: ${resume.personalInfo?.phone || "N/A"}</p>
-
         <h3>Skills</h3>
         <p>${resume.skills?.join(", ") || "No skills listed"}</p>
-
         <h3>Experience</h3>
-        ${resume.experience
-        ?.map(
-          (exp) => `
-          <p><strong>${exp.company || "Unknown Company"}</strong></p>
-        `
-        )
-        .join("") || "<p>No experience listed</p>"
-      }
-
+        ${resume.experience?.map((exp) => `<p><strong>${exp.company || "Unknown Company"}</strong></p>`).join("") || "<p>No experience listed</p>"}
         <h3>Projects</h3>
-        ${resume.projects
-        ?.map(
-          (proj) => `
+        ${resume.projects?.map((proj) => `
           <p><strong>${proj?.title || "Untitled Project"}</strong></p>
           <p>${proj?.description || "No description available"}</p>
-          ${proj?.link
-              ? `<p><a href="${proj.link}" target="_blank">${proj.link}</a></p>`
-              : ""
-            }
-        `
-        )
-        .join("") || "<p>No projects listed</p>"
-      }
-
+          ${proj?.link ? `<p><a href="${proj.link}" target="_blank">${proj.link}</a></p>` : ""}
+        `).join("") || "<p>No projects listed</p>"}
         <h3>Education</h3>
-        ${resume.education
-        ?.map(
-          (edu) => `
-          <p><strong>${edu?.school || "Unknown School"}</strong> - ${edu?.degree || "Unknown Degree"
-            } (${edu?.year || "N/A"})</p>
-        `
-        )
-        .join("") || "<p>No education listed</p>"
-      }
+        ${resume.education?.map((edu) => `
+          <p><strong>${edu?.school || "Unknown School"}</strong> - ${edu?.degree || "Unknown Degree"} (${edu?.year || "N/A"})</p>
+        `).join("") || "<p>No education listed</p>"}
       </body>
       </html>
     `;
 
-    // Set HTML content in Puppeteer
     await page.setContent(htmlContent);
-
-    // Generate PDF
     const pdfBuffer = await page.pdf({ format: "A4" });
+    // console.log("PDF Buffer length:", pdfBuffer.length);
 
     await browser.close();
 
-    // Send the generated PDF
     res.set({
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${resume.personalInfo?.name.replace(/\s+/g, "_") || "Resume"
-        }.pdf"`,
+      "Content-Length": pdfBuffer.length,
+      "Content-Disposition": `attachment; filename="${resume.personalInfo?.name.replace(/\s+/g, "_") || "Resume"}.pdf"`,
     });
-
-    res.send(pdfBuffer);
+    res.end(pdfBuffer, "binary");
   } catch (err) {
     console.error("Error generating resume:", err);
     res.status(500).json({ error: "Failed to generate resume PDF" });

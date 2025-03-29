@@ -1,60 +1,60 @@
 import { useRef, useEffect, useState } from "react";
-import { useReactToPrint } from "react-to-print";
+// import { useReactToPrint } from "react-to-print";
 import useResumeStore from "../../../store/resumeStore";
-import { FiDownload, FiPrinter, FiLoader } from "react-icons/fi";
+import { FiDownload, FiLoader } from "react-icons/fi";
 
 export default function ResumePreview() {
-  const { personalInfo, skills, experience, projects, education, fetchResume, updateResume, saveResume, downloadResume } = useResumeStore();
+  const { personalInfo, skills, experience, projects, education, fetchResume, updateResume, saveResume, downloadResume, currentResumeId } = useResumeStore();
   const resumeRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-  
-      fetchResume();
-    
-  }, []);
-
-  const printPDF = useReactToPrint({
-    content: () => resumeRef.current,
-    documentTitle: `${personalInfo?.name || "Resume"}.pdf`,
-    pageStyle: `
-      @page {
-        size: A4;
-        margin: 20mm;
-      }
-      @media print {
-        .no-print {
-          display: none !important;
-        }
-      }
-    `,
-  });
-
-  const handlePrint = async () => {
-    setIsLoading(true);
-    try {
-      await updateResume();
-      if (!resumeRef.current) {
-        console.error("Error: Resume content is not available.");
-        return;
-      }
-      setTimeout(() => {
-        printPDF();
-        setIsLoading(false);
-      }, 500);
-    } catch (error) {
-      console.error("Failed to print resume:", error);
-      setIsLoading(false);
+    if (currentResumeId) {
+      console.log("Fetching resume with ID:", currentResumeId);
+      fetchResume(currentResumeId);
+    } else {
+      console.log("No currentResumeId yet, skipping fetch");
     }
-  };
+  }, [currentResumeId, fetchResume]);
+
+  // const printPDF = useReactToPrint({
+  //   content: () => resumeRef.current,
+  //   documentTitle: `${personalInfo?.name || "Resume"}.pdf`,
+  //   pageStyle: `
+  //     @page {
+  //       size: A4;
+  //       margin: 20mm;
+  //     }
+  //     @media print {
+  //       .no-print {
+  //         display: none !important;
+  //       }
+  //     }
+  //   `,
+  // });
 
   const handleDownload = async () => {
     setIsLoading(true);
     try {
-      await updateResume();
-      await downloadResume();
+      let resumeId = currentResumeId;
+      if (!resumeId) {
+        console.log("No currentResumeId, saving resume first...");
+        const response = await saveResume();
+        console.log("Save response:", response);
+        resumeId = response.resumeId || response._id; // Handle different response structures
+        if (!resumeId) {
+          throw new Error("No resumeId returned from saveResume");
+        }
+        console.log("New resumeId after save:", resumeId);
+      } else {
+        console.log("Updating existing resume with ID:", resumeId);
+        await updateResume(resumeId);
+      }
+      console.log("Downloading resume with ID:", resumeId);
+      await downloadResume(resumeId);
     } catch (error) {
       console.error("Failed to download resume:", error);
+      alert("Failed to download resume. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -64,13 +64,16 @@ export default function ResumePreview() {
     setIsLoading(true);
     try {
       await saveResume();
+      console.log("Resume saved successfully, currentResumeId:", currentResumeId);
     } catch (error) {
       console.error("Failed to save resume:", error);
+      alert("Failed to save resume. Please try again.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
+  // ... Rest of the component (return statement remains unchanged)
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 flex items-center justify-center">
       <div className="w-full max-w-4xl space-y-6">
@@ -213,14 +216,6 @@ export default function ResumePreview() {
           >
             {isLoading ? <FiLoader className="animate-spin" size={20} /> : <FiDownload size={20} />}
             Download as PDF
-          </button>
-          <button
-            onClick={handlePrint}
-            disabled={isLoading || !resumeRef.current}
-            className="py-2 px-6 bg-green-600 text-white rounded-lg font-semibold flex items-center gap-2 hover:bg-green-700 disabled:bg-gray-700 disabled:text-gray-400 transition-colors duration-300"
-          >
-            {isLoading ? <FiLoader className="animate-spin" size={20} /> : <FiPrinter size={20} />}
-            Print Resume
           </button>
         </div>
       </div>
