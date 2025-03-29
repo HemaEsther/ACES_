@@ -3,11 +3,12 @@ import useResumeStore from "../../../store/resumeStore";
 import { FiPlus, FiTrash } from "react-icons/fi";
 
 export default function Skills() {
-  const { skills, setSkills, fetchResume, updateResume } = useResumeStore();
+  const { skills, setSkills, fetchResume, updateResume, currentResumeId } = useResumeStore();
   const [skill, setSkill] = useState("");
 
+  console.log("current resume id in skills", currentResumeId);
   useEffect(() => {
-    fetchResume(); // Fetch resume data on mount
+    fetchResume(currentResumeId); // Fetch resume data on mount
   }, []);
 
   const addSkill = async () => {
@@ -18,7 +19,7 @@ export default function Skills() {
     setSkill("");
     
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error updating skills:", error);
     }
@@ -29,7 +30,7 @@ export default function Skills() {
     setSkills(updatedSkills);
     
     try {
-      await updateResume();
+      await updateResume(currentResumeId);
     } catch (error) {
       console.error("Error removing skill:", error);
     }

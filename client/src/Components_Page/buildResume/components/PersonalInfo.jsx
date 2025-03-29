@@ -2,34 +2,36 @@ import { useEffect } from "react";
 import useResumeStore from "../../../store/resumeStore";
 
 export default function PersonalInfo() {
-  const { personalInfo, setPersonalInfo, fetchResume, updateResume } = useResumeStore();
-  
-  useEffect( () => {
-    fetchResume(); // Load resume when the component mounts
-  }, []); // Empty array ensures it runs only once
+  const { personalInfo, setPersonalInfo, fetchResume, updateResume, currentResumeId } = useResumeStore();
+
+  console.log("current resume id in personal info", currentResumeId);
+  useEffect(() => {
+    if (currentResumeId) {
+      fetchResume(currentResumeId); // Only fetch if currentResumeId is set
+    }
+  }, [currentResumeId]); // Depend on currentResumeId, not an empty array
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setPersonalInfo({ ...personalInfo, [name]: value });
 
-    try {
-      await updateResume();
-    } catch (error) {
-      console.error("Error updating resume:", error);
+    if (currentResumeId) { // Only update if editing an existing resume
+      try {
+        await updateResume(currentResumeId);
+      } catch (error) {
+        console.error("Error updating resume:", error);
+      }
     }
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-white">Personal Information</h2>
         <p className="text-gray-400 text-sm mt-1">
           Enter your personal details to start building your resume
         </p>
       </div>
-
-      {/* Form Fields */}
       <div className="space-y-4">
         {["name", "email", "phone", "linkedin", "github"].map((field) => (
           <div key={field}>
