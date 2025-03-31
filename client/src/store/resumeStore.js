@@ -2,7 +2,9 @@ import { create } from "zustand";
 import axios from "axios";
 import { persist } from "zustand/middleware";
 
-const API_BASE_URL = "http://localhost:5000/api/resume";
+// const API_BASE_URL = "http://localhost:5000/api/resume";
+const API_BASE_URL = "https://resumebuilderserver.onrender.com/api/auth";
+
 
 const useResumeStore = create(
   persist(
