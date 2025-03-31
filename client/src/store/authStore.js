@@ -70,7 +70,9 @@ const useAuthStore = create(
         console.error("Logout failed:", error.response?.data?.message);
       }
     },
-  }))
+  }),
+  { name: "auth-storage" } // 🔹 Added persist storage name
+)
 );
 
 export default useAuthStore;
