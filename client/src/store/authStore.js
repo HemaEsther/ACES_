@@ -2,6 +2,8 @@ import { create } from "zustand";
 import axios from "axios";
 import { persist } from "zustand/middleware";
 
+const API_BASE_URL = "http://localhost:5000/api/auth";
+
 const useAuthStore = create(
   persist((set) => ({
     user: null,
@@ -11,7 +13,7 @@ const useAuthStore = create(
     fetchUser: async () => {
       set({ loading: true }); // Start loading
       try {
-        const response = await axios.get("http://localhost:5000/api/auth/me", {
+        const response = await axios.get(`${API_BASE_URL}/me`, {
           withCredentials: true,
         });
         // Only update if user was previously null (prevents duplicate login toast)
@@ -29,7 +31,7 @@ const useAuthStore = create(
     signup: async (userData) => {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/signup",
+          `${API_BASE_URL}/signup`,
           userData,
           { withCredentials: true }
         );
@@ -43,7 +45,7 @@ const useAuthStore = create(
     login: async (credentials) => {
       set({ loading: true }); // Start loading
       try {
-        await axios.post("http://localhost:5000/api/auth/login", credentials, {
+        await axios.post(`${API_BASE_URL}/login`, credentials, {
           withCredentials: true,
         });
         await useAuthStore.getState().fetchUser();
@@ -57,7 +59,7 @@ const useAuthStore = create(
     logout: async () => {
       try {
         await axios.post(
-          "http://localhost:5000/api/auth/logout",
+          `${API_BASE_URL}/logout`,
           {},
           { withCredentials: true }
         );
