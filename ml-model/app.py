@@ -38,5 +38,14 @@ def predict():
         # Optionally remove "message" if not needed
     })
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load environment variables from .env
+
+port = int(os.getenv("PORT", 5000))  # Default to 5000 if not set
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5002, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Default to 5000 if PORT is not set
+    app.run(host="0.0.0.0", port=port, debug=True)
