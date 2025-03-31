@@ -12,7 +12,6 @@ export const handleResume = async (req, res) => {
       .status(400)
       .json({ error: "Job role and description are required" });
   }
-
   let resumeText = "";
   try {
     const pdfData = await PdfParse(fs.readFileSync(req.file.path));
