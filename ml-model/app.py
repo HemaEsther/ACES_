@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import joblib
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from flask_cors import CORS
 
 # Load pre-trained model & encoder
 ats_model = joblib.load("ats_model.pkl")
@@ -9,6 +10,7 @@ role_encoder = joblib.load("role_encoder.pkl")
 bert_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all domains
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -47,5 +49,6 @@ port = int(os.getenv("PORT", 5000))  # Default to 5000 if not set
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Default to 5000 if PORT is not set
+    port = int(os.environ.get("PORT", 10000))  # Default to 10000 for Render
     app.run(host="0.0.0.0", port=port, debug=True)
+
