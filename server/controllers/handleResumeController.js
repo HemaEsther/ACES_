@@ -22,7 +22,7 @@ export const handleResume = async (req, res) => {
   }
 
   try {
-    const response = await axios.post("http://127.0.0.1:5002/predict", {
+    const response = await axios.post("https://resumebuilder-ml.onrender.com/predict", {
       resume_text: resumeText,
       job_desc,
       role,
