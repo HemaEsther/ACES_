@@ -12,7 +12,8 @@ app.use(express.json());
 app.use(cookieParser()); // Required for handling cookies
 app.use(
   cors({
-    origin: "https://resume-builder-gamma-one.vercel.app", // ✅ Allow frontend origin
+    origin: process.env.FRONTEND_URL_DEVELOPMENT, // frontend origin for dev
+    // origin: process.env.FRONTEND_URL_PRODUCTION, // frontend origin for production
     credentials: true, // ✅ Allow cookies to be sent
   })
 );
@@ -24,7 +25,7 @@ import authRoutes from './routes/authRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import saveResumeRoutes from './routes/saveResumeRoutes.js'
 
-app.use('/api/auth', authRoutes); // authentication
+app.use('/api/', authRoutes); // authentication
 app.use('/api/upload', uploadRoutes); // upload resume to check ats score
 app.use('/api/resume', saveResumeRoutes); // CRUD Resume to db
 

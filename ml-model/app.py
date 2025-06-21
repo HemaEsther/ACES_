@@ -1,17 +1,35 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 import joblib
 import numpy as np
-from sentence_transformers import SentenceTransformer
-from flask_cors import CORS
 
-# Load pre-trained model & encoder
-ats_model = joblib.load("ats_model.pkl")
-role_encoder = joblib.load("role_encoder.pkl")
-bert_model = SentenceTransformer('all-MiniLM-L6-v2')
+# ─── Environment Setup ─────────────────────────
+load_dotenv()
+port = int(os.getenv("PORT", 5000))  # default port
 
+# ─── Flask App Initialization ─────────────────
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all domains
+CORS(app)
 
+# ─── Global Model References ──────────────────
+ats_model = None
+role_encoder = None
+bert_model = None
+
+# ─── Lazy Load Models ─────────────────────────
+def load_models():
+    global ats_model, role_encoder, bert_model
+    if ats_model is None:
+        ats_model = joblib.load("ats_model.pkl")
+    if role_encoder is None:
+        role_encoder = joblib.load("role_encoder.pkl")
+    if bert_model is None:
+        from sentence_transformers import SentenceTransformer
+        bert_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# ─── Prediction Route ─────────────────────────
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
@@ -22,11 +40,15 @@ def predict():
     if not resume_text or not job_desc or not role:
         return jsonify({"error": "Resume text, job description, and role are required!"}), 400
 
+    # Ensure models are loaded only once
+    load_models()
+
     try:
         role_encoded = role_encoder.transform([role])[0]
     except ValueError:
         role_encoded = -1
 
+    # Encode resume and job description
     resume_embedding = bert_model.encode(resume_text)
     job_desc_embedding = bert_model.encode(job_desc)
 
@@ -36,19 +58,9 @@ def predict():
 
     return jsonify({
         "score": ats_score,
-        "suggestions": [],  # Add empty array
-        # Optionally remove "message" if not needed
+        "suggestions": []  # Placeholder for future
     })
 
-from dotenv import load_dotenv
-import os
-
-load_dotenv()  # Load environment variables from .env
-
-port = int(os.getenv("PORT", 5000))  # Default to 5000 if not set
-
-
+# ─── Run the App ──────────────────────────────
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # Default to 10000 for Render
-    app.run(host="0.0.0.0", port=port, debug=True)
-
+    app.run(host="0.0.0.0", port=port, debug=False)  # Set debug=False in prod
