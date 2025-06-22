@@ -22,7 +22,7 @@ export const handleResume = async (req, res) => {
   }
 
   try {
-    const response = await axios.post("https://resumebuilder-ml.onrender.com/predict", {
+    const response = await axios.post(process.env.PYTHON_URL_DEVELOPMENT, {
       resume_text: resumeText,
       job_desc,
       role,

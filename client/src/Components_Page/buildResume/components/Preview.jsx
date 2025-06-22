@@ -2,20 +2,23 @@ import { useRef, useEffect, useState } from "react";
 // import { useReactToPrint } from "react-to-print";
 import useResumeStore from "../../../store/resumeStore";
 import { FiDownload, FiLoader } from "react-icons/fi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export default function ResumePreview() {
   const { personalInfo, skills, experience, projects, education, fetchResume, updateResume, saveResume, downloadResume, currentResumeId } = useResumeStore();
   const resumeRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (currentResumeId) {
-      console.log("Fetching resume with ID:", currentResumeId);
-      fetchResume(currentResumeId);
-    } else {
-      console.log("No currentResumeId yet, skipping fetch");
-    }
-  }, [currentResumeId, fetchResume]);
+  // useEffect(() => {
+  //   if (currentResumeId) {
+  //     // console.log("Fetching resume with ID:", currentResumeId);
+  //     fetchResume(currentResumeId);
+  //   } else {
+  //     // console.log("No currentResumeId yet, skipping fetch");
+  //   }
+  // }, [currentResumeId, fetchResume]);
 
   // const printPDF = useReactToPrint({
   //   content: () => resumeRef.current,
@@ -38,7 +41,7 @@ export default function ResumePreview() {
     try {
       let resumeId = currentResumeId;
       if (!resumeId) {
-        console.log("No currentResumeId, saving resume first...");
+        // console.log("No currentResumeId, saving resume first...");
         const response = await saveResume();
         console.log("Save response:", response);
         resumeId = response.resumeId || response._id; // Handle different response structures
@@ -64,7 +67,8 @@ export default function ResumePreview() {
     setIsLoading(true);
     try {
       await saveResume();
-      console.log("Resume saved successfully, currentResumeId:", currentResumeId);
+      toast.success("Resume saved successfully!");
+      // console.log("Resume saved successfully, currentResumeId:", currentResumeId);
     } catch (error) {
       console.error("Failed to save resume:", error);
       alert("Failed to save resume. Please try again.");
@@ -72,6 +76,8 @@ export default function ResumePreview() {
       setIsLoading(false);
     }
   };
+
+  
 
   // ... Rest of the component (return statement remains unchanged)
   return (

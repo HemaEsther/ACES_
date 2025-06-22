@@ -6,9 +6,15 @@ import Projects from "./components/Projects";
 import Education from "./components/Education";
 import Preview from "./components/Preview";
 import ChoiceScreen from "./components/ChoiceScreen";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export default function BuildResume() {
   const { step, nextStep, prevStep, saveResume, updateResume, currentResumeId, setStep } = useResumeStore();
+  const navigate = useNavigate();
+
 
   const handleChoice = () => {
     nextStep(); // Move from ChoiceScreen to PersonalInfo
@@ -24,17 +30,21 @@ export default function BuildResume() {
     try {
       if (currentResumeId) {
         await updateResume(currentResumeId);
-        alert("Resume updated successfully!");
+        toast.success("Resume updated successfully!");
       } else {
         await saveResume();
-        alert("Resume saved successfully!");
+        toast.success("Resume saved successfully!");
       }
-      handleBackToOptions(); // Return to ChoiceScreen after saving/updating
-    // eslint-disable-next-line no-unused-vars
+
+      setStep(1);
+      navigate("/buildresume");
+
     } catch (error) {
-      alert("Error saving/updating resume. Please try again.");
+      toast.error("Error saving/updating resume. Please try again.");
     }
   };
+
+
 
   const steps = [
     { component: <ChoiceScreen onChoice={handleChoice} />, title: "Choose Action" },
@@ -72,11 +82,10 @@ export default function BuildResume() {
                 <div key={index} className="flex items-center">
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                        index + 2 <= step
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${index + 2 <= step
                           ? "bg-amber-500 text-gray-900"
                           : "bg-gray-700 text-gray-400"
-                      }`}
+                        }`}
                     >
                       {index + 1}
                     </div>
@@ -86,9 +95,8 @@ export default function BuildResume() {
                   </div>
                   {index < steps.length - 2 && (
                     <div
-                      className={`h-1 w-16 mx-2 transition-all duration-300 ${
-                        index + 2 < step ? "bg-amber-500" : "bg-gray-700"
-                      }`}
+                      className={`h-1 w-16 mx-2 transition-all duration-300 ${index + 2 < step ? "bg-amber-500" : "bg-gray-700"
+                        }`}
                     />
                   )}
                 </div>
@@ -125,6 +133,8 @@ export default function BuildResume() {
                     onClick={handleFinish}
                     className="flex-1 py-2 px-4 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors duration-300"
                   >
+                    
+
                     Finish
                   </button>
                 )}
@@ -133,6 +143,9 @@ export default function BuildResume() {
           </div>
         </div>
       </div>
+      <ToastContainer position="top-center" autoClose={3000} />
+
     </div>
+    
   );
 }

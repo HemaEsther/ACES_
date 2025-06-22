@@ -3,7 +3,8 @@ import axios from "axios";
 import { persist } from "zustand/middleware";
 
 // const API_BASE_URL = "http://localhost:5000/api/resume";
-const API_BASE_URL = "https://resumebuilderserver.onrender.com/api/resume";
+// const API_BASE_URL = "https://resumebuilderserver.onrender.com/api/resume";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL_DEVELOPMENT;
 
 
 const useResumeStore = create(
@@ -58,7 +59,7 @@ const useResumeStore = create(
         try {
           const { personalInfo, skills, experience, projects, education } = get();
           const resumeData = { personalInfo, skills, experience, projects, education };
-          const response = await axios.post(`${API_BASE_URL}/save`, resumeData, {
+          const response = await axios.post(`${API_BASE_URL}/resume/save`, resumeData, {
             withCredentials: true,
           });
           set({
@@ -76,12 +77,12 @@ const useResumeStore = create(
 
       fetchResume: async (resumeId) => {
         if (!resumeId) {
-          console.warn("Skipping fetch: No resumeId yet (new resume)");
+          // console.warn("Skipping fetch: No resumeId yet (new resume)");
           return; // Exit early for new resumes
         }
         set({ loading: true });
         try {
-          const response = await axios.get(`${API_BASE_URL}/get/${resumeId}`, {
+          const response = await axios.get(`${API_BASE_URL}/resume/get/${resumeId}`, {
             withCredentials: true,
           });
           const { personalInfo, skills, experience, projects, education, _id } = response.data;
@@ -104,7 +105,7 @@ const useResumeStore = create(
       fetchALLResume: async () => {
         set({ loading: true });
         try {
-          const response = await axios.get(`${API_BASE_URL}/getAll`, {
+          const response = await axios.get(`${API_BASE_URL}/resume/getAll`, {
             withCredentials: true,
           });
           set({
@@ -119,8 +120,9 @@ const useResumeStore = create(
       },
 
       updateResume: async (resumeId) => {
+        // console.log("🔥 API called to update resume"); 
         if (!resumeId) {
-          console.warn("Skipping update: No resumeId yet (new resume)");
+          // console.warn("Skipping update: No resumeId yet (new resume)");
           return; // Exit early for new resumes
         }
         set({ loading: true });
@@ -128,7 +130,7 @@ const useResumeStore = create(
           const { personalInfo, skills, experience, projects, education } = get();
           const updatedData = { personalInfo, skills, experience, projects, education };
           // console.log("Updating resumeId:", resumeId, "with data:", JSON.stringify(updatedData, null, 2));
-          const response = await axios.patch(`${API_BASE_URL}/update/${resumeId}`, updatedData, {
+          const response = await axios.patch(`${API_BASE_URL}/resume/update/${resumeId}`, updatedData, {
             withCredentials: true,
           });
           // console.log("Update response:", JSON.stringify(response.data, null, 2));
@@ -157,7 +159,7 @@ const useResumeStore = create(
       deleteResume: async (resumeId) => { // New method
         set({ loading: true });
         try {
-          await axios.delete(`${API_BASE_URL}/delete/${resumeId}`, {
+          await axios.delete(`${API_BASE_URL}/resume/delete/${resumeId}`, {
             withCredentials: true,
           });
           set({ loading: false });
@@ -176,12 +178,12 @@ const useResumeStore = create(
 
       downloadResume: async (resumeId) => {
         if (!resumeId) {
-          console.warn("Skipping fetch: No resumeId yet (new resume)");
+          // console.warn("Skipping fetch: No resumeId yet (new resume)");
           return; // Exit early for new resumes
         }
         set({ loading: true });
         try {
-          const response = await axios.get(`${API_BASE_URL}/download/${resumeId}`, {
+          const response = await axios.get(`${API_BASE_URL}/resume/download/${resumeId}`, {
             withCredentials: true,
             responseType: "blob",
           });
