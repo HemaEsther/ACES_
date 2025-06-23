@@ -22,7 +22,7 @@ export const handleResume = async (req, res) => {
   }
 
   try {
-    const response = await axios.post(process.env.PYTHON_URL_DEVELOPMENT, {
+    const response = await axios.post(process.env.PYTHON_URL_PRODUCTION, {
       resume_text: resumeText,
       job_desc,
       role,
