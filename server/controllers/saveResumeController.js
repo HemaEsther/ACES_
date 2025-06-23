@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import puppeteer from "puppeteer";
+
 
 /* ───────────────── CREATE ───────────────── */
 export const saveResumeController = async (req, res) => {
