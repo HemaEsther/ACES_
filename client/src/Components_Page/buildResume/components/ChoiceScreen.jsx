@@ -66,7 +66,7 @@ export default function ChoiceScreen({ onChoice }) {
                   onClick={() => handleEditResume(resume)}
                   className="flex-1 py-2 px-4 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors duration-300 text-left truncate"
                 >
-                  {resume.title || `Resume ${resume._id}`}
+                  {resume.title || `Resume - ${resume.personalInfo.name}`}
                 </button>
                 <button
                   onClick={() => handleDeleteResume(resume._id)}
@@ -79,7 +79,6 @@ export default function ChoiceScreen({ onChoice }) {
           </div>
         )}
       </div>
-      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }

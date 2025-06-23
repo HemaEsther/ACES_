@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cookieParser()); // Required for handling cookies
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL_DEVELOPMENT, // frontend origin for dev
+    origin: process.env.FRONTEND_URL_PRODUCTION, // frontend origin for dev
     // origin: process.env.FRONTEND_URL_PRODUCTION, // frontend origin for production
     credentials: true, // ✅ Allow cookies to be sent
   })
