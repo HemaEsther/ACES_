@@ -116,9 +116,11 @@ export const downloadResumeController = async (req, res) => {
 
     /* ---- launch Puppeteer ---- */
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: "/usr/bin/google-chrome-stable",
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      headless: true
     });
+
     const page = await browser.newPage();
 
     /* ---- load template ---- */
