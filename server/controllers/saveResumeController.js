@@ -1,7 +1,7 @@
 /* ---------- controllers/saveResumeController.js ---------- */
 import Resume from "../models/resumeSchema.js";
 import mongoose from "mongoose";
-import puppeteer from "puppeteer-core";
+// import puppeteer from "puppeteer-core";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -25,7 +25,7 @@ export const saveResumeController = async (req, res) => {
     await newResume.save();
     res.status(201).json({
       message: "Resume saved successfully!",
-      resumeId: newResume._id,        
+      resumeId: newResume._id,
       _id: newResume._id              // optional, for backward compatibility
     });
   } catch (err) {
@@ -114,10 +114,8 @@ export const downloadResumeController = async (req, res) => {
 
     /* ---- launch Puppeteer ---- */
     const browser = await puppeteer.launch({
-      headless: "new",
-      executablePath:
-        process.env.CHROME_PATH ||
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
@@ -159,11 +157,10 @@ export const downloadResumeController = async (req, res) => {
       <div class="item">
         <h3 class="bold">${proj.title || ""}</h3>
         <p class="sub">${proj.description || ""}</p>
-        ${
-          proj.link
-            ? `<a href="${proj.link}" target="_blank">${proj.link}</a>`
-            : ""
-        }
+        ${proj.link
+        ? `<a href="${proj.link}" target="_blank">${proj.link}</a>`
+        : ""
+      }
       </div>`);
 
     /* ---------- section wrappers ---------- */
@@ -214,9 +211,8 @@ export const downloadResumeController = async (req, res) => {
     res.set({
       "Content-Type": "application/pdf",
       "Content-Length": pdfBuffer.length,
-      "Content-Disposition": `attachment; filename="${
-        (resume.personalInfo?.name || "Resume").replace(/\s+/g, "_")
-      }.pdf"`,
+      "Content-Disposition": `attachment; filename="${(resume.personalInfo?.name || "Resume").replace(/\s+/g, "_")
+        }.pdf"`,
     });
     res.end(pdfBuffer, "binary");
   } catch (err) {
