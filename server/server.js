@@ -18,8 +18,6 @@ app.use(
   })
 );
 
-
-
 // Routes
 import authRoutes from './routes/authRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
@@ -28,9 +26,11 @@ import saveResumeRoutes from './routes/saveResumeRoutes.js'
 app.use('/api/', authRoutes); // authentication
 app.use('/api/upload', uploadRoutes); // upload resume to check ats score
 app.use('/api/resume', saveResumeRoutes); // CRUD Resume to db
-app.get("/", (req, res) => {
-  res.send("Server is running ✅");
-});
+
+
+// app.get("/", (req, res) => {
+//   res.send("Server is running ✅");
+// });
 
 
 
