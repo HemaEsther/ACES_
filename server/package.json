@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-    "postinstall": "puppeteer install"
+     "postinstall": "npx puppeteer install"
   },
   "keywords": [],
   "author": "",
