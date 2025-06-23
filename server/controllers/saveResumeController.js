@@ -1,7 +1,6 @@
 /* ---------- controllers/saveResumeController.js ---------- */
 import Resume from "../models/resumeSchema.js";
 import mongoose from "mongoose";
-// import puppeteer from "puppeteer-core";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -116,10 +115,10 @@ export const downloadResumeController = async (req, res) => {
 
     /* ---- launch Puppeteer ---- */
     const browser = await puppeteer.launch({
-      executablePath: "/usr/bin/google-chrome-stable",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      headless: true
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+
 
     const page = await browser.newPage();
 
