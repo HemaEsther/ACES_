@@ -15,14 +15,14 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Download spaCy language model during build
+# ✅ Download spaCy model AFTER installing spaCy
 RUN python -m spacy download en_core_web_sm
 
 # Copy the rest of the app
 COPY . .
 
-# Expose the port (5002)
+# Expose port
 EXPOSE 5002
 
-# ✅ Use gunicorn instead of Flask dev server
+# ✅ Use gunicorn to run the app
 CMD ["gunicorn", "--bind", "0.0.0.0:5002", "app:app"]
