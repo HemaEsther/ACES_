@@ -18,11 +18,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Download spaCy language model during build
 RUN python -m spacy download en_core_web_sm
 
-# Now copy the rest of your app (after installing deps for cache efficiency)
+# Copy the rest of the app
 COPY . .
 
-# Expose your Flask port (use 5002 if that's what you're using)
+# Expose the port (5002)
 EXPOSE 5002
 
-# Run the Flask app
-CMD ["python3", "app.py"]
+# ✅ Use gunicorn instead of Flask dev server
+CMD ["gunicorn", "--bind", "0.0.0.0:5002", "app:app"]

@@ -27,7 +27,7 @@ export const handleResume = async (req, res) => {
       job_desc,
       role,
     });
-    // console.log(response.data); // WORKING Fine
+    console.log(response.data); // WORKING Fine
     // Normalize the response
     const normalizedResponse = {
       score: response.data.score,
