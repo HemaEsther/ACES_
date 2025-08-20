@@ -25,11 +25,10 @@ With ACES, you can enhance your resume, ensure it aligns with job requirements, 
 - **NLP Text Preprocessing** – Tokkenization, Stop word removal, Lemmatization, Word Embeddings.
 - **Model** - Sentence BERT(self attention mechanism), creates contexualized Embediings for sentence simantic similarity(cosine similarity).
 - **Pipeline** Training - Model trained for over 10000+ Resume Samples to calculate ATS Score based on Job descriptiona nd Job role.
-- **Dataset** - From Kaggle with over 10000+ tuples.
 - **Fine-Tuning** – For enhancing model performance with custom training.
 - **AI Chatbot - Open AI API** – For conversational AI capabilities(Fine tuned)
 
-- ### Containerization
+### Containerization
 - **Docker** - Whole application dockerized for scalable deployment
 - **Continous Integration** - Implemented CI using Github Actions
 
