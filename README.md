@@ -3,31 +3,35 @@
 ACES (AI-Powered Career Enhancement System) build by (Ahmad, China, Esther, Shivam) is an innovative tool designed to optimize your resume-building experience and evaluate its compatibility with job ### applications. Powered by machine learning (ML) and natural language processing (NLP) techniques, ACES offers the following features:
 ATS Score Checker: Analyze your resume's Applicant Tracking System (ATS) compatibility score based on the job description and role you’re applying for.
 AI Chatbot: Access a fine-tuned chatbot to answer all your resume-related questions and provide personalized guidance.
-LaTeX Resume Builder: Create professional resumes using an integrated LaTeX editor, similar to Overleaf, for precise formatting and design.
+Resume creation - users can create professional grade resume and can even download them as pdf(with industry standar resume format, future plan - to include multiple formats)
 With ACES, you can enhance your resume, ensure it aligns with job requirements, and get expert advice—all in one place.
 
 ## Tech Stack
 
 ### Frontend:
 - **React.js** – For building the user interface.
-- **TailwindCSS** – For styling with utility-first CSS.
 - **ShadCN UI** – For pre-built, customizable UI components.
 - **React Hook Form** – For efficient form handling.
 - **Framer Motion** - For Dynamic UI
+- **Debouncing** - For rate limiting
 
 ### Backend:
 - **Node.js** – For server-side execution.
 - **Express.js** – For building RESTful APIs.
 - **MongoDB** – For database storage and management.
-- **Latext Text Editor** – Integration of complex latex text editor for creating industry ready resumes
+- **Puppeteer** – Headless chromium and dynamically populating HTML to generate pdf with pixel perfect pdfs.
 
 ### AI Integration:
 - **NLP Text Preprocessing** – Tokkenization, Stop word removal, Lemmatization, Word Embeddings.
-- **Model** Training - Model trained for over 10000+ Resume Samples to calculate ATS Score with Accuracy of 97% using XGBoost.
+- **Model** - Sentence BERT(self attention mechanism), creates contexualized Embediings for sentence simantic similarity(cosine similarity).
+- **Pipeline** Training - Model trained for over 10000+ Resume Samples to calculate ATS Score based on Job descriptiona nd Job role.
 - **Dataset** - From Kaggle with over 10000+ tuples.
 - **Fine-Tuning** – For enhancing model performance with custom training.
 - **AI Chatbot - Open AI API** – For conversational AI capabilities(Fine tuned)
 
+- ### Containerization
+- **Docker** - Whole application dockerized for scalable deployment
+- **Continous Integration** - Implemented CI using Github Actions
 
 
 # How to get Started
