@@ -1,7 +1,8 @@
 # ACES - AI Powered Resume Builder and ATS Score Prediction
 ## About the Project
-ACES (AI-Powered Career Enhancement System) build by (Ahmad, China, Esther, Shivam) is an innovative tool designed to optimize your resume-building experience and evaluate its compatibility with job ### applications. Powered by machine learning (ML) and natural language processing (NLP) techniques, ACES offers the following features:
+ACES (AI-Powered Career Enhancement System) build by (Ahmad, China, Esther, Shivam) is an innovative tool designed to optimize your resume-building experience and evaluate its compatibility with job applications. Powered by machine learning (ML) and natural language processing (NLP) techniques, ACES offers the following features:
 ATS Score Checker: Analyze your resume's Applicant Tracking System (ATS) compatibility score based on the job description and role you’re applying for.
+Multiple Resume Templates - ACES generates pixel perfect pdf's using pupeeteer.
 AI Chatbot: Access a fine-tuned chatbot to answer all your resume-related questions and provide personalized guidance.
 Resume creation - users can create professional grade resume and can even download them as pdf(with industry standar resume format, future plan - to include multiple formats)
 With ACES, you can enhance your resume, ensure it aligns with job requirements, and get expert advice—all in one place.
@@ -31,6 +32,7 @@ With ACES, you can enhance your resume, ensure it aligns with job requirements, 
 ### Containerization
 - **Docker** - Whole application dockerized for scalable deployment
 - **Continous Integration** - Implemented CI using Github Actions
+- **Continous Deployment** - Handled by Render service
 
 
 # How to get Started
