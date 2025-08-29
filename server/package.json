@@ -6,9 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js",
-    "postinstall": "puppeteer browsers install chrome --path=.cache/puppeteer"
-
+    "server": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +27,6 @@
     "natural": "^8.0.1",
     "nodemon": "^3.1.9",
     "path": "^0.12.7",
-    "pdf-parse": "^1.1.1",
     "puppeteer": "^24.10.2"
   }
 }

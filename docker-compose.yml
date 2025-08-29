@@ -1,21 +1,20 @@
-version: "3.8"
-
 services:
   frontend:
     build:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"  # Ensure correct mapping
-    env_file: 
-      - ./client/.env  # Fix path (remove space)
+      - "5173:5173"
+    env_file:
+      - ./client/.env
     volumes:
-      - ./client:/app  # Mount only the client directory
-      # - /app/node_modules  # Prevent overwriting node_modules
-    restart: always  # Restart on failure
+      - ./client:/app
+      - /app/node_modules # This line creates a separate anonymous volume for node_modules,
+                          # preventing it from being overwritten by the host machine's directory.
+    restart: always
 
   ml-model:
-    build: 
+    build:
       context: ./ml-model
     ports:
       - "5002:5002"
@@ -29,10 +28,10 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"  # Corrected unnecessary comment
-    env_file: 
-      - ./server/.env  # Fix path (remove space)
+      - "5001:5001"
+    env_file:
+      - ./server/.env
     volumes:
-      - ./server:/app  # Mount only the backend directory
-      # - /app/node_modules  # Prevent overwriting node_modules
-    restart: always  # Restart on failure
+      - ./server:/app
+      - /app/node_modules # Add this for the backend as well if it uses node
+    restart: always

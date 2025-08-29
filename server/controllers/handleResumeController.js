@@ -1,5 +1,5 @@
 import fs from "fs";
-import PdfParse from "pdf-parse";
+// import PdfParse from "pdf-parse";
 import axios from "axios";
 
 export const handleResume = async (req, res) => {
@@ -22,7 +22,8 @@ export const handleResume = async (req, res) => {
   }
 
   try {
-    const response = await axios.post(process.env.PYTHON_URL_PRODUCTION, {
+    // localhost kam nahi kar raha 
+    const response = await axios.post('http://ml-model:5002/predict', {
       resume_text: resumeText,
       job_desc,
       role,
@@ -36,7 +37,7 @@ export const handleResume = async (req, res) => {
 
     return res.json(normalizedResponse);
   } catch (error) {
-    console.error("Error in ATS model request:", error.message);
-    return res.status(500).json({ error: "ATS Model Error" });
+    console.error("Error in ATS model request: 🙈🙈🙈", error.message);
+    return res.status(500).json({ error: "ATS Model Error inside 🫠🫠🫠 SERVER" });
   }
 };

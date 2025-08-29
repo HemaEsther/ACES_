@@ -87,5 +87,3 @@ pip freeze > requirements.txt
 ``` bash
 deactivate
 ```
-
-

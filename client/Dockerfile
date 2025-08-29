@@ -1,20 +1,24 @@
-# Use official Node.js runtime as parent image
-FROM node:22-alpine
+# Stage 1: Build the application
+FROM node:22-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
+RUN npm install
 
-# Install dependencies
-RUN npm i
+COPY . .
+RUN npm run build
 
-# Copy the rest of the application
+# Stage 2: Create a minimal, production-ready image
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
 COPY . .
 
-# Expose the correct port
 EXPOSE 5173
 
-# Start the server
 CMD ["npm", "run", "dev", "--", "--host"]
