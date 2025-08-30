@@ -28,7 +28,7 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./server
           file: ./server/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
@@ -37,7 +37,7 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./client
           file: ./client/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
@@ -46,7 +46,7 @@ jobs:
       - name: Build and push ml-model image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./ml-model
           file: ./ml-model/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/ml-model:latest
