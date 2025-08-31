@@ -1,6 +1,9 @@
 import fs from "fs";
-import PdfParse from "pdf-parse";
 import axios from "axios";
+// import pdfParse from "pdf-parse";   --------- issue with this
+import pdfParse from "pdf-parse-fixed";
+
+
 
 export const handleResume = async (req, res) => {
   console.log(req.body)
@@ -16,20 +19,21 @@ export const handleResume = async (req, res) => {
   }
   let resumeText = "";
   try {
-    const pdfData = await PdfParse(fs.readFileSync(req.file.path));
+    const pdfData = await pdfParse(fs.readFileSync(req.file.path));
     resumeText = pdfData.text;
     fs.unlinkSync(req.file.path);
   } catch (error) {
     return res.status(500).json({ error: "Error processing resume file 😭😭😭" });
   }
 
-  const docker_url_python_backend='http://ml-model:5002/predict';
+  // const docker_url_python_backend='http://ml-model:5002/predict';
   const local_url_python_backend='http://localhost:5002/predict';
-  const production_url_python_backend='https://aces-kth9.onrender.com/predict';
+  // const production_url_python_backend='https://aces-kth9.onrender.com/predict';
 
   try {
     // localhost kam nahi kar raha 
-    const response = await axios.post(`${docker_url_python_backend}`, {
+    console.log("Helooooooooo")
+    const response = await axios.post(`${local_url_python_backend}`, {
       resume_text: resumeText,
       job_desc,
       role,
