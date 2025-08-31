@@ -88,4 +88,10 @@ pip freeze > requirements.txt
 deactivate
 ```
 
-
+### To run as container image
+```sh
+docker compose up --build #initially to run
+# Stop containers ctrl + c
+# To Delete containers
+docker compose down
+````
