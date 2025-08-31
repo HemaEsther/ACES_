@@ -11,7 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Achievements from "./components/Achievements";
 import Extracurricular from "./components/Extracurricular";
-
+import { Home, LayoutDashboard } from "lucide-react";
 
 export default function BuildResume() {
   const { step, nextStep, prevStep, saveResume, updateResume, currentResumeId, setStep } = useResumeStore();
@@ -23,9 +23,8 @@ export default function BuildResume() {
   };
 
   const handleBackToOptions = () => {
-    if (window.confirm("Are you sure? Unsaved changes will be lost.")) {
-      setStep(1); // Return to ChoiceScreen
-    }
+    setStep(1); // Return to ChoiceScreen
+
   };
 
   const handleFinish = async () => {
@@ -67,54 +66,61 @@ export default function BuildResume() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 flex items-center justify-center">
       <div className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden">
+
         {/* Header with Back to Options */}
         <div className="p-6 border-b border-gray-800 flex justify-between items-center">
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="flex items-center gap-2 px-3 py-1.5 bg-gray-700 text-white rounded-lg 
+               hover:bg-gray-600 transition-colors duration-300 text-sm"
+          >
+            <LayoutDashboard size={18} />
+            <span className="hidden sm:inline">Dashboard</span> {/* hide text on xs screens */}
+          </button>
           <h1 className="text-2xl font-bold text-white">Resume Builder</h1>
           {!isChoiceStep && (
             <button
               onClick={handleBackToOptions}
               className="py-1 px-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors duration-300 text-sm"
             >
-              Back to Home
+              Back to Resumes
             </button>
           )}
         </div>
 
         {/* Progress Bar (Hidden on Choice Step) */}
-{!isChoiceStep && (
-  <div className="px-6 pb-6 overflow-x-auto">
-    <div className="flex items-center min-w-max gap-4">
-      {steps.slice(1).map((stepItem, index) => {
-        const stepNumber = index + 2;
-        return (
-          <div key={index} className="flex items-center">
-            <div className="flex flex-col items-center">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  stepNumber <= step
-                    ? "bg-amber-500 text-gray-900"
-                    : "bg-gray-700 text-gray-400"
-                }`}
-              >
-                {stepNumber - 1}
-              </div>
-              <span className="text-xs mt-2 text-gray-300 text-center max-w-[90px] whitespace-nowrap">
-                {stepItem.title}
-              </span>
+        {!isChoiceStep && (
+          <div className="px-6 pb-6 overflow-x-auto">
+            <div className="flex items-center min-w-max gap-4">
+              {steps.slice(1).map((stepItem, index) => {
+                const stepNumber = index + 2;
+                return (
+                  <div key={index} className="flex items-center">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${stepNumber <= step
+                          ? "bg-amber-500 text-gray-900"
+                          : "bg-gray-700 text-gray-400"
+                          }`}
+                      >
+                        {stepNumber - 1}
+                      </div>
+                      <span className="text-xs mt-2 text-gray-300 text-center max-w-[90px] whitespace-nowrap">
+                        {stepItem.title}
+                      </span>
+                    </div>
+                    {index < steps.length - 2 && (
+                      <div
+                        className={`h-1 w-10 sm:w-14 mx-2 transition-all duration-300 ${stepNumber < step ? "bg-amber-500" : "bg-gray-700"
+                          }`}
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            {index < steps.length - 2 && (
-              <div
-                className={`h-1 w-10 sm:w-14 mx-2 transition-all duration-300 ${
-                  stepNumber < step ? "bg-amber-500" : "bg-gray-700"
-                }`}
-              />
-            )}
           </div>
-        );
-      })}
-    </div>
-  </div>
-)}
+        )}
 
 
 
@@ -156,7 +162,19 @@ export default function BuildResume() {
           </div>
         </div>
       </div>
-      <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}   // 👈 don’t pause if tab loses focus
+        draggable
+        pauseOnHover={false}       // 👈 don’t pause on hover
+        theme="colored"
+      />
+
 
     </div>
 
