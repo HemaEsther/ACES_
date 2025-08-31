@@ -1,8 +1,10 @@
 import fs from "fs";
-// import PdfParse from "pdf-parse";
+import PdfParse from "pdf-parse";
 import axios from "axios";
 
 export const handleResume = async (req, res) => {
+  console.log(req.body)
+  console.log(req.file)
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
   const { role, job_desc } = req.body;
@@ -18,12 +20,16 @@ export const handleResume = async (req, res) => {
     resumeText = pdfData.text;
     fs.unlinkSync(req.file.path);
   } catch (error) {
-    return res.status(500).json({ error: "Error processing resume file" });
+    return res.status(500).json({ error: "Error processing resume file 😭😭😭" });
   }
+
+  const docker_url_python_backend='http://ml-model:5002/predict';
+  const local_url_python_backend='http://localhost:5002/predict';
+  const production_url_python_backend='https://aces-kth9.onrender.com/predict';
 
   try {
     // localhost kam nahi kar raha 
-    const response = await axios.post('http://ml-model:5002/predict', {
+    const response = await axios.post(`${docker_url_python_backend}`, {
       resume_text: resumeText,
       job_desc,
       role,

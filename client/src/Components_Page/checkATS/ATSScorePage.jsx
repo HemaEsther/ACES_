@@ -59,6 +59,7 @@ const ATSScorePage = () => {
     setIsLoading(true);
 
     try {
+      console.log("halllloo")
       const response = await axios.post(
         // "https://resumebuilderserver.onrender.com/api/upload/resume",
         "http://localhost:5001/api/upload/resume",
@@ -68,7 +69,7 @@ const ATSScorePage = () => {
           withCredentials: true,
         }
       );
-      // console.log(response); // working fine
+      console.log("haaaaa",response); // working fine
       // console.log(response.data.score);
       setResults(response.data);
       console.log("Results before rendering AtsResult after req:", results);
