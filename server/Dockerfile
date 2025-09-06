@@ -1,9 +1,10 @@
 FROM node:22-alpine
+
+# Set working directory
 WORKDIR /app
-RUN chown -R node:node /app
-COPY --chown=node:node package.json package-lock.json ./
+
+# Install system dependencies needed for Puppeteer
 RUN apk add --no-cache \
-    chromium \
     nss \
     freetype \
     harfbuzz \
@@ -15,9 +16,27 @@ RUN apk add --no-cache \
     glib \
     fontconfig \
     && rm -rf /var/cache/apk/*
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH="/usr/bin/chromium-browser"
-RUN npm install --omit=dev && npm cache clean --force && npx puppeteer browsers install chrome
-COPY --chown=node:node . .
+
+# Create a non-root user to run the app
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Make sure the app directory is owned by our user
+RUN chown -R appuser:appgroup /app
+
+# Switch to non-root user
+USER appuser
+
+# Copy package files first for caching
+COPY --chown=appuser:appgroup package.json package-lock.json ./
+
+# Install dependencies (Puppeteer downloads Chromium automatically)
+RUN npm install --omit=dev && npm cache clean --force
+
+# Copy the rest of the app
+COPY --chown=appuser:appgroup . .
+
+# Expose server port
 EXPOSE 5001
+
+# Start the server
 CMD ["node", "server.js"]

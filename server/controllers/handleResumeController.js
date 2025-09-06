@@ -28,14 +28,14 @@ export const handleResume = async (req, res) => {
     return res.status(500).json({ error: "Error processing resume file 😭😭😭" });
   }
 
-  // const docker_url_python_backend='http://ml-model:5002/predict';
+  const docker_url_python_backend='http://ml-model:5002/predict';
   const local_url_python_backend='http://localhost:5002/predict';
-  // const production_url_python_backend='https://aces-kth9.onrender.com/predict';
+  const production_url_python_backend='https://aces-kth9.onrender.com/predict';
 
   try {
     // localhost kam nahi kar raha 
     console.log("Helooooooooo")
-    const response = await axios.post(`${local_url_python_backend}`, {
+    const response = await axios.post(`${docker_url_python_backend}`, { // change to local host when on local machine
       resume_text: resumeText,
       job_desc,
       role,
