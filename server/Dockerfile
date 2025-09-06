@@ -30,7 +30,7 @@ USER appuser
 COPY --chown=appuser:appgroup package.json package-lock.json ./
 
 # Install dependencies (Puppeteer downloads Chromium automatically)
-RUN npm install --omit=dev && npm cache clean --force
+RUN npm install 
 
 # Copy the rest of the app
 COPY --chown=appuser:appgroup . .
