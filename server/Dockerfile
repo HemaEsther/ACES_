@@ -3,8 +3,9 @@ FROM node:22-alpine
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies needed for Puppeteer
+# Install system dependencies AND the Chromium browser executable
 RUN apk add --no-cache \
+    chromium \
     nss \
     freetype \
     harfbuzz \
@@ -16,6 +17,9 @@ RUN apk add --no-cache \
     glib \
     fontconfig \
     && rm -rf /var/cache/apk/*
+
+# Set the environment variable for Puppeteer to find the executable
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Create a non-root user to run the app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -29,7 +33,7 @@ USER appuser
 # Copy package files first for caching
 COPY --chown=appuser:appgroup package.json package-lock.json ./
 
-# Install dependencies (Puppeteer downloads Chromium automatically)
+# Install dependencies (will now find the system-installed Chromium)
 RUN npm install 
 
 # Copy the rest of the app
