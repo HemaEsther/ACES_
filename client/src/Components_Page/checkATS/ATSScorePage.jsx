@@ -3,6 +3,8 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AtsResult from "./AtsResult";
+import { LayoutDashboard } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ATSScorePage = () => {
   const [file, setFile] = useState(null); // for resume
@@ -12,6 +14,8 @@ const ATSScorePage = () => {
   const [results, setResults] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const navigate = useNavigate()
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -69,7 +73,7 @@ const ATSScorePage = () => {
           withCredentials: true,
         }
       );
-      console.log("haaaaa",response); // working fine
+      console.log("haaaaa", response); // working fine
       // console.log(response.data.score);
       setResults(response.data);
       console.log("Results before rendering AtsResult after req:", results);
@@ -97,17 +101,26 @@ const ATSScorePage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 p-6 flex items-center justify-center">
       <div className="w-full max-w-2xl bg-gray-900 rounded-2xl shadow-xl border border-gray-800 overflow-hidden">
         {/* Progress Bar */}
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-gray-900 font-semibold 
+             rounded-lg shadow-md hover:bg-amber-600 hover:shadow-lg 
+             transition-all duration-300 text-sm sm:text-base"
+        >
+          <LayoutDashboard size={18} />
+          <span>Go to Dashboard</span>
+        </button>
+
         <div className="p-6 border-b border-gray-800">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
               <div key={index} className="flex items-center">
                 <div className="flex flex-col items-center">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                      index + 1 <= currentStep
-                        ? "bg-amber-500 text-gray-900"
-                        : "bg-gray-700 text-gray-400"
-                    }`}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${index + 1 <= currentStep
+                      ? "bg-amber-500 text-gray-900"
+                      : "bg-gray-700 text-gray-400"
+                      }`}
                   >
                     {index + 1}
                   </div>
@@ -117,9 +130,8 @@ const ATSScorePage = () => {
                 </div>
                 {index < 2 && (
                   <div
-                    className={`h-1 w-20 mx-4 transition-all duration-300 ${
-                      index + 1 < currentStep ? "bg-amber-500" : "bg-gray-700"
-                    }`}
+                    className={`h-1 w-20 mx-4 transition-all duration-300 ${index + 1 < currentStep ? "bg-amber-500" : "bg-gray-700"
+                      }`}
                   />
                 )}
               </div>

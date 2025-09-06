@@ -27,7 +27,11 @@
     "natural": "^8.0.1",
     "nodemon": "^3.1.9",
     "path": "^0.12.7",
+<<<<<<< HEAD
     "pdfjs-dist": "^3.11.174",
+=======
+    "pdf-parse-fixed": "^1.1.1",
+>>>>>>> b8cc275f8aad853702bc2eaffc3c2065f874dbff
     "puppeteer": "^24.10.2"
   }
 }
