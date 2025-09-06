@@ -7,5 +7,5 @@ spec:
   selector:
     app: ml-model
   ports:
-  - port: 5002
+  - port: 80
     targetPort: 5002
