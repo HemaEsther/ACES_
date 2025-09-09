@@ -33,6 +33,8 @@ USER appuser
 # Copy package files first for caching
 COPY --chown=appuser:appgroup package.json package-lock.json ./
 
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
 # Install dependencies (will now find the system-installed Chromium)
 RUN npm install 
 
