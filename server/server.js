@@ -39,7 +39,7 @@ app.use("/api/upload", uploadRoutes); // Upload resume to check ATS score
 app.use("/api/resume", saveResumeRoutes); // CRUD Resume to DB
 
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT}`);
+app.listen(PORT,'0.0.0.0', () => {
+  console.log(`🚀 Server listening on port 0.0.0.0:${PORT}`);
   connectDB();
 });
