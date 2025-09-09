@@ -63,7 +63,6 @@ const ATSScorePage = () => {
     setIsLoading(true);
 
     try {
-      console.log("halllloo")
       const response = await axios.post(
         // "https://resumebuilderserver.onrender.com/api/upload/resume",
         "http://localhost:5001/api/upload/resume",
